@@ -58,14 +58,10 @@ const login = async() => {
 }
 
 
-const uploadImage = async() =>{
+const uploadImage = () =>{
 
-    
-
-
-
-    const file = document.getElementById("photo").file
-    const storageRef = ref(storage, "newUserPhotos/" + file)
+    const file = document.getElementById("photo").files[0]
+    const storageRef = ref(storage, "newUserPhotos/" + file.name)
 
     // Create file metadata including the content type
     /** @type {any} */
