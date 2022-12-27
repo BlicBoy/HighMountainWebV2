@@ -75,6 +75,15 @@ const uploadImage = () =>{
     })
 
 
+    getDownloadURL(ref(storage, "newUserPhotos/" + file.name))
+        .then((url) =>{
+            console.log(url)
+        })
+        .catch((error) =>{
+            console.log(error.code+" "+error.message);
+        })
+
+
 }
 
 
