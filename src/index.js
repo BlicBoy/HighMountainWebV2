@@ -141,6 +141,8 @@ const loginStatus = async() =>{
     if(localStorage.getItem("uId") != null){
         window.location.href = "./profileUser.html"
         console.log("Logged")
+    }else{
+        window.location.href = "./index.html"
     }
 }
 
@@ -154,16 +156,10 @@ const logout = async() =>{
     })
 }
 
-
-
-
-
 if(window.location.pathname == "/index.html"){
-    loginStatus()
     document.getElementById("btn-entrar-login").addEventListener("click", login)
 }else{
     if(window.location.pathname=="/register.html"){
-        loginStatus()
         document.getElementById("save-info-cliente").addEventListener("click", registerClient)
     }else{
         if(window.location.pathname == "/profileUser.html"){
