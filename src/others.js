@@ -25,6 +25,11 @@ if(window.location.pathname == "/index.html"){
     }else{
         if(window.location.pathname == "/profileUser.html"){
             verifySession()
+        }else{
+            if(window.location.pathname == "/saudeCliente.html"){
+                verifySession()
+            }
+
         }
     }
 }
