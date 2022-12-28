@@ -14,7 +14,7 @@ const firebaseConfig = initializeApp({
 
 import {
     getFirestore,
-    doc, setDoc,
+    doc, setDoc,addDoc ,
     getDoc,
     getDocs,
     deleteDoc,
@@ -137,14 +137,16 @@ const saveCliente = async() =>{
     
 }
 
-const loginStatus = async() =>{
-    if(localStorage.getItem("uId") != null){
-        window.location.href = "./profileUser.html"
-        console.log("Logged")
-    }else{
-        window.location.href = "./index.html"
+
+const saude = () =>{
+    const SaudeInfo ={
+        tipodeSangue : document.getElementById("tp-sangue").value,
+        doencas : document.getElementById("doencas").value,
+        alergias : document.getElementById("alergias").value
     }
 }
+
+
 
 const logout = async() =>{
     auth.signOut().then((on)=>{
@@ -165,6 +167,10 @@ if(window.location.pathname == "/index.html"){
         if(window.location.pathname == "/profileUser.html"){
             
             document.getElementById("logout-btn").addEventListener("click", logout)
+        }else{
+            if(window.location.pathname == "/saudeCliente.html" ){
+                document.getElementById("salvar-saude").addEventListener("click", saveSaude)
+            }
         }
     }
 }
