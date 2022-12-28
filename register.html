@@ -8,7 +8,21 @@
 </head>
 <body>
 
-    <form>
+    
+
+        <label for="email-register">Email:</label>
+        <input name="email" id="email-register" type="email" placeholder="Email">
+
+        <br>
+        <br>
+
+        
+        <label for="password-register">Password:</label>
+        <input name="password" id="password-register" type="password" placeholder="Password">
+
+        <br>
+        <br>
+
         <label for="firstname-register">First Name:</label>
         <input name="firstname" id="firstname-register" type="text" placeholder="FirstName">
 
@@ -27,26 +41,30 @@
         <br>
         <br>
 
+        <label for="phone-register">Número de Telemovel: </label>
+        <input type="tel" id="phone-register" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="123 456 789">
+        <br>
+        <br>
+
         <label for="sexualidade">Sexualidade</label>
+        
             <select id="sexualidade" name="sexualidade">
                 <option value="Masculino">Masculino</option>
                 <option value="Feminino">Feminino</option>
                 <option value="Não Binário">Não Binário</option>
             </select>
+
+
             <br>
             <br>
+    <label for="photo">Foto Perfil</label>
+    <input type="file" id="photo">
 
-            <label for="photo">Foto Perfil</label>
-            <input type="file" id="photo">
-    
-            <button id="save-info-cliente">Salvar</button>
-    
-
+    <br>
+    <br>
 
 
-        
-    </form>
-    
+    <button id="save-info-cliente">Salvar</button>
     
 
     <script type="module" src="src/index.js"></script>

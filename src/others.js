@@ -4,4 +4,11 @@ const SendRegister = async() =>{
 }
 
 
-document.getElementById("register").addEventListener("click", SendRegister)
+
+if(window.location.pathname == "/index.html"){
+    document.getElementById("register").addEventListener("click", SendRegister)
+}else{
+    if(window.location.pathname == "/register.html"){
+        
+    }
+}

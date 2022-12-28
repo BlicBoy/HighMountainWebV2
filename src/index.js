@@ -38,6 +38,7 @@ const db = getFirestore(firebaseConfig)
 const storage = getStorage(firebaseConfig)
 
 
+
 const login = async() => {
 
     console.log("login!")
@@ -48,42 +49,109 @@ const login = async() => {
     await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) =>{
         const user = userCredential.user
-        localStorage.setItem("email", user.email)
-        localStorage.setItem("uid", user.uid)
+        localStorage.setItem("uId", user.uid)
         
-        window.location.href="./Painel-Admin.html"
+        window.location.href="./profileUser.html"
     }).catch((error) =>{
         console.log(error.code+ " "+ error.message)
     })
 }
 
+const newUser = async () =>{
+    const ClientInfo = {
+        uId : localStorage.getItem("uId"),
+        FirstName : document.getElementById("firstname-register").value,
+        LastName : document.getElementById("lastname-register").value,
+        dataNascimento : document.getElementById("datanasc-register").value,
+        numeroTelemovel : document.getElementById("phone-register").value,
+        sexualidade : document.getElementById("sexualidade").value,
+        photoURL : localStorage.getItem("urlPhoto"),
+        role : "Cliente"
+    }
+    return ClientInfo
+}
 
-const uploadImage = () =>{
+
+const registerClient = async() =>{
+
+
+    let email = document.getElementById("email-register").value
+    let password = document.getElementById("password-register").value
+
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            console.log("User Criado")
+            const user = userCredential.user;
+            localStorage.setItem("uId", user.uid)
+            console.log(localStorage.getItem("uId")) 
+
+            uploadImage()
+            saveCliente()
+
+        }).catch((error) =>{
+            console.log(error.code + " " + error.message)
+        })
+
+}
+ 
+
+const uploadImage = async() =>{
 
     const file = document.getElementById("photo").files[0]
-    const storageRef = ref(storage, "newUserPhotos/" + file.name)
+    const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uId") + file.name )
 
     // Create file metadata including the content type
     /** @type {any} */
+
     const metadata = {
         contentType: 'image/jpeg',
     };
 
-
     uploadBytes(storageRef, file, metadata).then((snapshot) =>{
-        console.log("Upload")
+        console.log("Upload Image")
+        localStorage.setItem("urlPhoto", localStorage.getItem("uId") + file.name )
     })
 
-
-    getDownloadURL(ref(storage, "newUserPhotos/" + file.name))
+    getDownloadURL(ref(storage, "newUserPhotos/" + localStorage.getItem("uId") + file.name  ))
         .then((url) =>{
             console.log(url)
         })
         .catch((error) =>{
             console.log(error.code+" "+error.message);
         })
+    
+}
 
 
+const saveCliente = async() =>{
+    const info  = await newUser()
+
+    try{
+        await setDoc(doc(collection(db, "newUsers"), localStorage.getItem("uId")), info)
+        console.log("dados inseridos")
+
+        window.location.href = "./profileUser.html"
+    }catch(error){
+        console.log(error)
+    }
+    
+}
+
+const loginStatus = async() =>{
+    if(localStorage.getItem("uId") != null){
+        window.location.href = "./profileUser.html"
+        console.log("Logged")
+    }
+}
+
+const logout = async() =>{
+    auth.signOut().then((on)=>{
+        console.log("Sair")
+        localStorage.clear()
+        window.location.href= "./index.html"
+    }).catch((error)=>{
+        console.log(error)
+    })
 }
 
 
@@ -91,10 +159,17 @@ const uploadImage = () =>{
 
 
 if(window.location.pathname == "/index.html"){
+    loginStatus()
     document.getElementById("btn-entrar-login").addEventListener("click", login)
 }else{
     if(window.location.pathname=="/register.html"){
-        document.getElementById("save-info-cliente").addEventListener("click", uploadImage)
+        loginStatus()
+        document.getElementById("save-info-cliente").addEventListener("click", registerClient)
+    }else{
+        if(window.location.pathname == "/profileUser.html"){
+            
+            document.getElementById("logout-btn").addEventListener("click", logout)
+        }
     }
 }
 
