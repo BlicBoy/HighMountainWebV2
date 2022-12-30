@@ -130,15 +130,15 @@ const saveCliente = async() =>{
         await setDoc(doc(collection(db, "newUsers"), localStorage.getItem("uId")), info)
         console.log("dados inseridos")
 
-        window.location.href = "./profileUser.html"
+        window.location.href = "./saudeCliente.html"
     }catch(error){
         console.log(error)
     }
     
 }
 
-
-const saude = () =>{
+/** 
+const saude = async() =>{
     const SaudeInfo ={
         tipodeSangue : document.getElementById("tp-sangue").value,
         doencas : document.getElementById("doencas").value,
@@ -146,6 +146,54 @@ const saude = () =>{
     }
 }
 
+
+const saveSaude = async() =>{
+    const info = await saude()
+
+    try {   
+
+    } catch (error) {
+        console.log(error);
+    }
+
+} */
+
+
+const getUserById = async() =>{
+    try {
+        const docSnap = await getDoc(doc(db, "newUsers", localStorage.getItem("uId")))
+        console.log(docSnap.data())
+        return docSnap.data()
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+
+const dataCurrentUser = async(doc) =>{
+    document.getElementById("firstname-profile").value = doc.FirstName
+    document.getElementById("lastname-profile").value = doc.LastName
+    document.getElementById("datanasc-profile").value = doc.dataNascimento
+    document.getElementById("phone-profile").value = doc.numeroTelemovel
+    document.getElementById("sexualidade").value = doc.sexualidade
+}
+
+
+const identifyRole = async(doc) =>{
+    if(doc.role == "Administrador"){
+        console.log("Es Administrador")
+
+        //Funções adicionais administrador
+    }else if(doc.role == "Cliente"){
+        console.log("És Cliente")
+        //Funções adicionais cliente
+
+        
+    }
+} 
 
 
 const logout = async() =>{
@@ -167,6 +215,13 @@ if(window.location.pathname == "/index.html"){
         if(window.location.pathname == "/profileUser.html"){
             
             document.getElementById("logout-btn").addEventListener("click", logout)
+
+            const info = await getUserById()
+            dataCurrentUser(info)
+            
+            identifyRole(info)
+            
+
         }else{
             if(window.location.pathname == "/saudeCliente.html" ){
                 document.getElementById("salvar-saude").addEventListener("click", saveSaude)

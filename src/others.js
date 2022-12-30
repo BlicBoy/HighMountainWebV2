@@ -8,6 +8,11 @@ const SendLogin = async() =>{
     window.location.href = "./index.html"
 }
 
+const SendPerfilUser = async() =>{
+    console.log("Perfil User")
+    window.location.href = "./profileUser.html"
+}
+
 
 const verifySession = async() =>{
     if(localStorage.getItem("uId") == null){
@@ -15,6 +20,8 @@ const verifySession = async() =>{
         SendLogin()
     }
 }
+
+
 
 
 if(window.location.pathname == "/index.html"){
@@ -28,6 +35,8 @@ if(window.location.pathname == "/index.html"){
         }else{
             if(window.location.pathname == "/saudeCliente.html"){
                 verifySession()
+
+                document.getElementById("profilUser").addEventListener("click", SendPerfilUser)
             }
 
         }
