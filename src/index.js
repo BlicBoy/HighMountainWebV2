@@ -185,15 +185,40 @@ const dataCurrentUser = async(doc) =>{
 const identifyRole = async(doc) =>{
     if(doc.role == "Administrador"){
         console.log("Es Administrador")
-
         //Funções adicionais administrador
+
+    
     }else if(doc.role == "Cliente"){
         console.log("És Cliente")
         //Funções adicionais cliente
-
-        
+    
     }
-} 
+}
+
+
+
+const dataEditUser = async () =>{
+    const data = {
+        FirstName:  document.getElementById("firstname-profile").value,
+        LastName :  document.getElementById("lastname-profile").value,
+        dataNascimento: document.getElementById("datanasc-profile").value,
+        numeroTelemovel:  document.getElementById("phone-profile").value,
+        sexualidade: document.getElementById("sexualidade").value
+    }
+
+    return data
+}
+
+const editInfo = async() =>{
+    const info = await dataEditUser()
+
+    try {
+        await setDoc(doc(db,"newUsers", localStorage.getItem("uId")   ), info)
+        console.log("Sucesso")
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 const logout = async() =>{
@@ -218,10 +243,9 @@ if(window.location.pathname == "/index.html"){
 
             const info = await getUserById()
             dataCurrentUser(info)
-            
             identifyRole(info)
-            
 
+            document.getElementById("save-information").addEventListener("click", editInfo)
         }else{
             if(window.location.pathname == "/saudeCliente.html" ){
                 document.getElementById("salvar-saude").addEventListener("click", saveSaude)
