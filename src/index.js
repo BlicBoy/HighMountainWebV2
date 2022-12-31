@@ -179,6 +179,9 @@ const dataCurrentUser = async(doc) =>{
     document.getElementById("datanasc-profile").value = doc.dataNascimento
     document.getElementById("phone-profile").value = doc.numeroTelemovel
     document.getElementById("sexualidade").value = doc.sexualidade
+    viewImage(doc.photoURL)
+
+
 }
 
 
@@ -193,9 +196,13 @@ const identifyRole = async(doc) =>{
         //Funções adicionais cliente
     
     }
+} 
+
+const viewImage = async(data) =>{
+    console.log(data)
+
+    
 }
-
-
 
 const dataEditUser = async () =>{
     const data = {
@@ -213,7 +220,7 @@ const editInfo = async() =>{
     const info = await dataEditUser()
 
     try {
-        await setDoc(doc(db,"newUsers", localStorage.getItem("uId")   ), info)
+        await updateDoc(doc(db,"newUsers", localStorage.getItem("uId")), info)
         console.log("Sucesso")
     } catch (error) {
         console.log(error)
