@@ -199,10 +199,9 @@ const identifyRole = async(doc) =>{
 } 
 
 const viewImage = async(data) =>{
-    console.log(data)
-
     getDownloadURL(ref(storage, "newUserPhotos/" + data))
         .then((url) =>{
+            console.log("Foto carregada com sucesso")
             document.getElementById("imagem-perfil").setAttribute('src', url)
         })
         .catch((error) =>{
@@ -216,7 +215,8 @@ const dataEditUser = async () =>{
         LastName :  document.getElementById("lastname-profile").value,
         dataNascimento: document.getElementById("datanasc-profile").value,
         numeroTelemovel:  document.getElementById("phone-profile").value,
-        sexualidade: document.getElementById("sexualidade").value
+        sexualidade: document.getElementById("sexualidade").value,
+        photoURL: localStorage.getItem("urlPhoto")
     }
 
     return data
@@ -226,8 +226,10 @@ const editInfo = async() =>{
     const info = await dataEditUser()
 
     try {
-        await updateDoc(doc(db,"newUsers", localStorage.getItem("uId")), info)
+        uploadImage()
+        await updateDoc(doc(db,"newUsers", localStorage.getItem("uId")), info)  
         console.log("Sucesso")
+        viewImage(info.photoURL)
     } catch (error) {
         console.log(error)
     }
@@ -243,6 +245,8 @@ const logout = async() =>{
         console.log(error)
     })
 }
+
+
 
 if(window.location.pathname == "/index.html"){
     document.getElementById("btn-entrar-login").addEventListener("click", login)
