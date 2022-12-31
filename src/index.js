@@ -201,7 +201,13 @@ const identifyRole = async(doc) =>{
 const viewImage = async(data) =>{
     console.log(data)
 
-    
+    getDownloadURL(ref(storage, "newUserPhotos/" + data))
+        .then((url) =>{
+            document.getElementById("imagem-perfil").setAttribute('src', url)
+        })
+        .catch((error) =>{
+            console.log(error)
+        })
 }
 
 const dataEditUser = async () =>{
