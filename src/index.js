@@ -104,7 +104,7 @@ const uploadImage = async() =>{
     /** @type {any} */
 
     const metadata = {
-        contentType: 'image/jpeg',
+        contentType: 'image/jpeg, image/png',
     };
 
     uploadBytes(storageRef, file, metadata).then((snapshot) =>{
@@ -137,7 +137,7 @@ const saveCliente = async() =>{
     
 }
 
-/** 
+
 const saude = async() =>{
     const SaudeInfo ={
         tipodeSangue : document.getElementById("tp-sangue").value,
@@ -149,14 +149,38 @@ const saude = async() =>{
 
 const saveSaude = async() =>{
     const info = await saude()
+    const uid = localStorage.getItem("uId")
 
-    try {   
+    console.log(uid)
 
-    } catch (error) {
-        console.log(error);
-    }
+   
+   /**  await collection("newUsers")
+            .document(uid)
+            .collection("Saude")
+            .document(uid)
+            .set(info)
+            .then(()=>{
+                console.log("sucess")
+            })*/ 
 
-} */
+
+
+            try{
+
+                const documentReference2 = await doc(db, "newUsers", uid, "Saude", uid)
+
+               // const documentReference = await collection(db,"newUsers").doc(uid).collection(db,"Saude").doc(uid)
+                const docRef = await addDoc(documentReference2,info)
+
+               
+                console.log("ID: ", docRef)
+            }catch(error){
+                console.log(error)
+            }
+           
+
+          
+} 
 
 
 const getUserById = async() =>{
@@ -182,21 +206,12 @@ const dataCurrentUser = async(doc) =>{
     viewImage(doc.photoURL)
 
 
+    localStorage.setItem("role", doc.role)
+
+
 }
 
-
-const identifyRole = async(doc) =>{
-    if(doc.role == "Administrador"){
-        console.log("Es Administrador")
-        //Funções adicionais administrador
-
-    
-    }else if(doc.role == "Cliente"){
-        console.log("És Cliente")
-        //Funções adicionais cliente
-    
-    }
-} 
+ 
 
 const viewImage = async(data) =>{
     getDownloadURL(ref(storage, "newUserPhotos/" + data))
@@ -260,7 +275,6 @@ if(window.location.pathname == "/index.html"){
 
             const info = await getUserById()
             dataCurrentUser(info)
-            identifyRole(info)
 
             document.getElementById("save-information").addEventListener("click", editInfo)
         }else{
