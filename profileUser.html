@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Perfil</title>
 </head>
 <body>
-    <p>Profile</p>
+    <p>Perfil</p>
 
     <button id = "logout-btn">Logout</button>
     <br>
@@ -26,19 +26,19 @@
     <br>
 
 
-    <label for="firstname-profile">First Name:</label>
+    <label for="firstname-profile">Primeiro Nome:</label>
     <input name="firstname" id="firstname-profile" type="text" placeholder="FirstName">
 
     <br>
     <br>
 
-    <label for="lastname-profile">Last Name:</label>
+    <label for="lastname-profile">Último Nome:</label>
     <input name="Lastname" id="lastname-profile" type="text" placeholder="LastName">
 
     <br>
     <br>
 
-    <label for="datanasc-profile">Data Nascimento: </label>
+    <label for="datanasc-profile">Data de Nascimento: </label>
     <input type="date" id="datanasc-profile">
 
     <br>
@@ -46,15 +46,16 @@
 
     <label for="phone-profile">Número de Telemovel: </label>
     <input type="tel" id="phone-profile" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="123 456 789">
+
     <br>
     <br>
 
-    <label for="sexualidade">Sexualidade</label>
+    <label for="sexualidade">Sexo</label>
     
         <select id="sexualidade" name="sexualidade">
             <option value="Masculino">Masculino</option>
             <option value="Feminino">Feminino</option>
-            <option value="Não Binário">Não Binário</option>
+            <option value="Não Binário">Prefiro Não Dizer</option>
         </select>
     <br>
     <br>
@@ -62,6 +63,7 @@
     <button id="save-information">Salvar</button>
     <button id="saude-information">Saude</button><br><br>
     <button id="administrador-clientes" style="display: none;">Listar Clientes</button>
+    <button id="administrador-percursos">Percursos</button>
 
 
     <script type="module" src="/src/index.js"></script>

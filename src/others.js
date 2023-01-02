@@ -19,7 +19,22 @@ const SendPerfilUser = async() =>{
 
 const SendSaude = async() =>{
     console.log("Saude")
-    window.location.href ="./saudeCliente.html"
+    window.location.href = "./saudeCliente.html"
+}
+
+const SendPercursos = async() =>{
+    console.log("Percursos")
+    window.location.href = "./Admin/percursos.html"
+}
+
+const SendCriarPercursos = async() =>{
+    console.log("Criar Percursos")
+    window.location.href = "./Admin/percursos.html"
+}
+
+const Participantes = async() =>{
+    console.log("Participantes")
+    window.location.href = "./Admin/"
 }
 
 const verifySession = async() =>{
@@ -60,6 +75,16 @@ if(window.location.pathname == "/index.html"){
             if(window.location.pathname == "/saudeCliente.html"){
                 verifySession()
                 document.getElementById("profilUser").addEventListener("click", SendPerfilUser)
+            }else{
+                if(window.location.pathname == "/profileUser.html"){
+                    verifySession()
+                    document.getElementById("administrador-percursos").addEventListener("click", SendPercursos)
+                }else{
+                    if(window.location.pathname == "./Admin/percursos.html"){
+                        verifySession()
+                        document.getElementById("administrador-criarpercursos").addEventListener("click", SendCriarPercursos)
+                    }
+                }
             }
         }
     }
