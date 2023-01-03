@@ -24,12 +24,12 @@ const SendSaude = async() =>{
 
 const SendPercursos = async() =>{
     console.log("Percursos")
-    window.location.href = "./Admin/percursos.html"
+    window.location.href = "./percursos.html"
 }
 
 const SendCriarPercursos = async() =>{
     console.log("Criar Percursos")
-    window.location.href = "./Admin/percursos.html"
+    window.location.href = "./criarPercursos.html"
 }
 
 const Participantes = async() =>{
@@ -54,7 +54,7 @@ const verifyAdmin = async() =>{
 
 
 const sendListClientesAdmin = async() =>{
-    window.location.href ="./Admin/listClientes.html"
+    window.location.href ="./listClientes.html"
 }
 
 if(window.location.pathname == "/index.html"){
@@ -71,19 +71,18 @@ if(window.location.pathname == "/index.html"){
                 document.getElementById("administrador-clientes").style = "display: block"
             }
             document.getElementById("administrador-clientes").addEventListener("click", sendListClientesAdmin)
+            document.getElementById("administrador-percursos").addEventListener("click", SendPercursos)
+            document.getElementById("saude-information").addEventListener("click", SendSaude)
         }else{
-            if(window.location.pathname == "/saudeCliente.html"){
-                verifySession()
-                document.getElementById("profilUser").addEventListener("click", SendPerfilUser)
-            }else{
-                if(window.location.pathname == "/profileUser.html"){
+
+            if(window.location.pathname == "/percursos.html"){
+                console.log("AQUI")
+                document.getElementById("criarPercurso").addEventListener("click", SendCriarPercursos)
+            }   
+            else{
+                if(window.location.pathname == "/saudeCliente.html"){
                     verifySession()
-                    document.getElementById("administrador-percursos").addEventListener("click", SendPercursos)
-                }else{
-                    if(window.location.pathname == "./Admin/percursos.html"){
-                        verifySession()
-                        document.getElementById("administrador-criarpercursos").addEventListener("click", SendCriarPercursos)
-                    }
+                    document.getElementById("profilUser").addEventListener("click", SendPerfilUser)
                 }
             }
         }

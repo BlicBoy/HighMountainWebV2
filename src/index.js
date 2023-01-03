@@ -36,7 +36,8 @@ import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstati
 const auth = getAuth(firebaseConfig)
 const db = getFirestore(firebaseConfig)
 const storage = getStorage(firebaseConfig)
-
+let today = new Date()
+let currentDay = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
 
 
 const login = async() => {
@@ -152,34 +153,13 @@ const saveSaude = async() =>{
     const uid = localStorage.getItem("uId")
 
     console.log(uid)
-
-   
-   /**  await collection("newUsers")
-            .document(uid)
-            .collection("Saude")
-            .document(uid)
-            .set(info)
-            .then(()=>{
-                console.log("sucess")
-            })*/ 
-
-
-
             try{
-
-                const documentReference2 = await doc(db, "newUsers", uid, "Saude", uid)
-
-               // const documentReference = await collection(db,"newUsers").doc(uid).collection(db,"Saude").doc(uid)
-                const docRef = await addDoc(documentReference2,info)
-
-               
-                console.log("ID: ", docRef)
+             updateDoc(doc(collection(db, "newUsers/"+uid+"/Saude/"+uid)), info)
+             console.log("Sucesso")
             }catch(error){
                 console.log(error)
             }
-           
-
-          
+        
 } 
 
 
@@ -251,6 +231,31 @@ const editInfo = async() =>{
 }
 
 
+const createPercurso = async() =>{
+    const info = {
+        id : Math.random().toString(16).slice(2),
+        Descricao: "Teste Percuso",
+        DataCriacao: currentDay,
+        DataInicio : "15-01-2023",
+        HoraInicio : "20:30",
+        Criador: localStorage.getItem("uId")
+    }
+
+
+    try {
+        await setDoc(doc(collection(db, "newPercursos"), info.id), info)
+        console.log("Sucesso")
+        alert("Criado com sucesso!")
+    } catch (error) {
+        console.log(error)
+    }
+
+
+
+
+
+}
+
 const logout = async() =>{
     auth.signOut().then((on)=>{
         console.log("Sair")
@@ -280,6 +285,12 @@ if(window.location.pathname == "/index.html"){
         }else{
             if(window.location.pathname == "/saudeCliente.html" ){
                 document.getElementById("salvar-saude").addEventListener("click", saveSaude)
+            }else{
+                if(window.location.pathname =="/criarPercursos.html"){
+                    console.log("AQUI")
+                    console.log(currentDay)
+                    document.getElementById("save_percursos").addEventListener("click", createPercurso)
+                }
             }
         }
     }
