@@ -33,6 +33,10 @@ import {
 
 import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
 
+
+
+import{addPercursosToList, listPercursos} from "./listPercursos.js"
+
 const auth = getAuth(firebaseConfig)
 const db = getFirestore(firebaseConfig)
 const storage = getStorage(firebaseConfig)
@@ -247,10 +251,30 @@ const createPercurso = async() =>{
         await setDoc(doc(collection(db, "newPercursos"), info.id), info)
         console.log("Sucesso")
         alert("Criado com sucesso!")
+        window.location.href = "percursos.html"
     } catch (error) {
         console.log(error)
     }
 
+}
+
+const getPercursos = async() =>{
+    console.log("A listar Percursos")
+    const list = document.querySelector("#list")
+    list.innerHTML = ""
+    const querySnapshot = await getDocs(await query(collection(db,"newPercursos")))
+
+
+    
+
+    querySnapshot.forEach((doc)=>{
+        
+        listPercursos(doc)
+    })
+
+    
+        
+    
 }
 
 const logout = async() =>{
@@ -285,6 +309,10 @@ if(window.location.pathname == "/index.html"){
             }else{
                 if(window.location.pathname =="/criarPercursos.html"){
                     document.getElementById("save_percursos").addEventListener("click", createPercurso)
+                }else{
+                    if(window.location.pathname == "/percursos.html"){
+                        getPercursos()
+                    }
                 }
             }
         }
