@@ -234,10 +234,11 @@ const editInfo = async() =>{
 const createPercurso = async() =>{
     const info = {
         id : Math.random().toString(16).slice(2),
-        Descricao: "Teste Percuso",
+        Nome: document.getElementById("nome-percurso").value,
+        Descricao: document.getElementById("descricao-percurso").value,
         DataCriacao: currentDay,
-        DataInicio : "15-01-2023",
-        HoraInicio : "20:30",
+        DataInicio : document.getElementById("data-percurso").value,
+        HoraInicio : document.getElementById("hora-percurso").value,
         Criador: localStorage.getItem("uId")
     }
 
@@ -249,10 +250,6 @@ const createPercurso = async() =>{
     } catch (error) {
         console.log(error)
     }
-
-
-
-
 
 }
 
@@ -287,8 +284,6 @@ if(window.location.pathname == "/index.html"){
                 document.getElementById("salvar-saude").addEventListener("click", saveSaude)
             }else{
                 if(window.location.pathname =="/criarPercursos.html"){
-                    console.log("AQUI")
-                    console.log(currentDay)
                     document.getElementById("save_percursos").addEventListener("click", createPercurso)
                 }
             }
