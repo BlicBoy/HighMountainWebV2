@@ -2,7 +2,7 @@ let uid = localStorage.getItem("uId");
 let role = localStorage.getItem("role")
 
 
-const SendRegister = () =>{
+const SendRegister = async() =>{
     console.log("New user!")
     window.location.href = "./register.html"
 }
