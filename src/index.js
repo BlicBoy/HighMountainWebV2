@@ -53,28 +53,16 @@ const login = async() => {
 
     await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) =>{
+
         const user = userCredential.user
-        localStorage.setItem("uId", user.uid)
-        
-        window.location.href="./profileUser.html"
+        localStorage.setItem('uId', user.uid)
+        window.location.href="profileUser.html"
+
     }).catch((error) =>{
         console.log(error.code+ " "+ error.message)
     })
 }
 
-const newUser = async () =>{
-    const ClientInfo = {
-        uId : localStorage.getItem("uId"),
-        FirstName : document.getElementById("firstname-register").value,
-        LastName : document.getElementById("lastname-register").value,
-        dataNascimento : document.getElementById("datanasc-register").value,
-        numeroTelemovel : document.getElementById("phone-register").value,
-        sexualidade : document.getElementById("sexualidade").value,
-        photoURL : localStorage.getItem("urlPhoto"),
-        role : "Cliente"
-    }
-    return ClientInfo
-}
 
 
 const registerClient = async() =>{
@@ -85,22 +73,21 @@ const registerClient = async() =>{
 
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            console.log("User Criado")
-            const user = userCredential.user;
+            console.log("User Criado - Auth")
+            const user = userCredential.user
             localStorage.setItem("uId", user.uid)
-            console.log(localStorage.getItem("uId")) 
 
             uploadImage()
             saveCliente()
 
-        }).catch((error) =>{
-            console.log(error.code + " " + error.message)
         })
 
 }
  
 
 const uploadImage = async() =>{
+
+
 
     const file = document.getElementById("photo").files[0]
     const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uId") + file.name )
@@ -109,23 +96,30 @@ const uploadImage = async() =>{
     /** @type {any} */
 
     const metadata = {
-        contentType: 'image/jpeg, image/png',
+        contentType: 'image/jpeg, image/png, image/jpg',
     };
 
     uploadBytes(storageRef, file, metadata).then((snapshot) =>{
-        console.log("Upload Image")
-        localStorage.setItem("urlPhoto", localStorage.getItem("uId") + file.name )
+        console.log("Upload Image" + snapshot)
+        localStorage.setItem("photoURL", localStorage.getItem("uId") + file.name )
     })
-
-    getDownloadURL(ref(storage, "newUserPhotos/" + localStorage.getItem("uId") + file.name  ))
-        .then((url) =>{
-            console.log(url)
-        })
-        .catch((error) =>{
-            console.log(error.code+" "+error.message);
-        })
-    
 }
+
+
+const newUser = async () =>{
+    const ClientInfo = {
+        uId : localStorage.getItem("uId"),
+        FirstName : document.getElementById("firstname-register").value,
+        LastName : document.getElementById("lastname-register").value,
+        dataNascimento : document.getElementById("datanasc-register").value,
+        numeroTelemovel : document.getElementById("phone-register").value,
+        sexualidade : document.getElementById("sexualidade").value,
+        photoURL : localStorage.getItem("photoURL"),
+        role : "Cliente"
+    }
+    return ClientInfo
+}
+
 
 
 const saveCliente = async() =>{
@@ -134,8 +128,9 @@ const saveCliente = async() =>{
     try{
         await setDoc(doc(collection(db, "newUsers"), localStorage.getItem("uId")), info)
         console.log("dados inseridos")
+        console.log(localStorage.getItem("photoURL"))
 
-        window.location.href = "./saudeCliente.html"
+       // window.location.href = "./saudeCliente.html"
     }catch(error){
         console.log(error)
     }
@@ -143,28 +138,40 @@ const saveCliente = async() =>{
 }
 
 
-const saude = async() =>{
+
+
+const saveSaude = async() =>{
     const SaudeInfo ={
         tipodeSangue : document.getElementById("tp-sangue").value,
         doencas : document.getElementById("doencas").value,
         alergias : document.getElementById("alergias").value
     }
+    
+    try {
+       setDoc(doc(collection(db, "newUsers/"+ localStorage.getItem("uId")+"/Saude")), SaudeInfo)
+       console.log("Sucesso!")
+    } catch (error) {
+        console.log(error)
+    }
+
+} 
+
+
+const getUserSaude = async() =>{
+    try{
+        const docSnap = await getDocs(doc(db, "newUsers", localStorage.getItem("uId"),"/Saude"))
+        console.log(docSnap.data())
+        return docSnap.data()
+    }catch(error){
+        console.log(error)
+    }
 }
 
-
-const saveSaude = async() =>{
-    const info = await saude()
-    const uid = localStorage.getItem("uId")
-
-    console.log(uid)
-            try{
-             updateDoc(doc(collection(db, "newUsers/"+uid+"/Saude/"+uid)), info)
-             console.log("Sucesso")
-            }catch(error){
-                console.log(error)
-            }
-        
-} 
+const dataSaudeUser = async(doc) =>{
+    document.getElementById("alergias").value = doc.alergias
+    document.getElementById("doencas").value = doc.doencas
+    document.getElementById("tp-sangue").value = doc.tipodeSangue
+}
 
 
 const getUserById = async() =>{
@@ -236,45 +243,29 @@ const editInfo = async() =>{
 
 
 const createPercurso = async() =>{
-    const info = {
-        id : Math.random().toString(16).slice(2),
-        Nome: document.getElementById("nome-percurso").value,
-        Descricao: document.getElementById("descricao-percurso").value,
-        DataCriacao: currentDay,
-        DataInicio : document.getElementById("data-percurso").value,
-        HoraInicio : document.getElementById("hora-percurso").value,
-        Criador: localStorage.getItem("uId")
-    }
+  // const info = {
+  //     id : Math.random().toString(16).slice(2),
+  //     Nome: document.getElementById("nome-percurso").value,
+  //     Descricao: document.getElementById("descricao-percurso").value,
+  //     DataCriacao: currentDay,
+  //     DataInicio : document.getElementById("data-percurso").value,
+  //     HoraInicio : document.getElementById("hora-percurso").value,
+  //     Criador: localStorage.getItem("uId")
+  // }
 
 
-    try {
-        await setDoc(doc(collection(db, "newPercursos"), info.id), info)
-        console.log("Sucesso")
-        alert("Criado com sucesso!")
-        window.location.href = "percursos.html"
-    } catch (error) {
-        console.log(error)
-    }
+  // try {
+  //     await setDoc(doc(collection(db, "newPercursos"), info.id), info)
+  //     console.log("Sucesso")
+  //     alert("Criado com sucesso!")
+  //     window.location.href = "percursos.html"
+  // } catch (error) {
+  //     console.log(error)
+  // }
 
 }
 
 const getPercursos = async() =>{
-    console.log("A listar Percursos")
-    const list = document.querySelector("#list")
-    list.innerHTML = ""
-    const querySnapshot = await getDocs(await query(collection(db,"newPercursos")))
-
-
-    
-
-    querySnapshot.forEach((doc)=>{
-        
-        listPercursos(doc)
-    })
-
-    
-        
-    
 }
 
 const logout = async() =>{
@@ -290,22 +281,34 @@ const logout = async() =>{
 
 
 if(window.location.pathname == "/index.html"){
+    
     document.getElementById("btn-entrar-login").addEventListener("click", login)
+    
 }else{
     if(window.location.pathname=="/register.html"){
         document.getElementById("save-info-cliente").addEventListener("click", registerClient)
+    console.log(localStorage.getItem("uId"))
+
     }else{
         if(window.location.pathname == "/profileUser.html"){
+        console.log(localStorage.getItem("uId"))
+
             
             document.getElementById("logout-btn").addEventListener("click", logout)
 
             const info = await getUserById()
             dataCurrentUser(info)
 
+
+
+            const saude = await getUserSaude()
+            dataSaudeUser(saude)
             document.getElementById("save-information").addEventListener("click", editInfo)
+
+            document.getElementById("salvar-saude").addEventListener("click", saveSaude)
         }else{
             if(window.location.pathname == "/saudeCliente.html" ){
-                document.getElementById("salvar-saude").addEventListener("click", saveSaude)
+               
             }else{
                 if(window.location.pathname =="/criarPercursos.html"){
                     document.getElementById("save_percursos").addEventListener("click", createPercurso)

@@ -2,7 +2,7 @@ let uid = localStorage.getItem("uId");
 let role = localStorage.getItem("role")
 
 
-const SendRegister = () =>{
+const SendRegister = async() =>{
     console.log("New user!")
     window.location.href = "./register.html"
 }
@@ -57,14 +57,14 @@ const sendListClientesAdmin = async() =>{
     window.location.href ="./listClientes.html"
 }
 
-if(window.location.pathname == "/index.html"){
+if(window.location.pathname == "index.html"){
     document.getElementById("register").addEventListener("click", SendRegister)
 }else{
     if(window.location.pathname == "/register.html"){
-        document.getElementById("return-login").addEventListener("click", SendLogin)
+   
     }else{
         if(window.location.pathname == "/profileUser.html"){
-            verifySession()
+           // verifySession()
             const admin = verifyAdmin()
 
             if(admin){
