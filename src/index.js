@@ -236,8 +236,9 @@ const editInfo = async() =>{
 
 const uploadImagePercurso = async() =>{
 
-    const file = document.getElementById("photo").files[0]
-    const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uId") + file.name )
+    const file = document.getElementById("photoPercursos").files[0]
+    const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uIdPercursos") + file.name )
+    console.log(storageRef)
 
     // Create file metadata including the content type
     /** @type {any} */
@@ -248,7 +249,7 @@ const uploadImagePercurso = async() =>{
 
     uploadBytes(storageRef, file, metadata).then((snapshot) =>{
         console.log("Upload Image" + snapshot)
-        localStorage.setItem("photoURL", localStorage.getItem("uId") + file.name )
+        localStorage.setItem("photoPercursos", localStorage.getItem("uIdPercursos") + file.name )
     })
 }
 
@@ -257,21 +258,28 @@ const createPercurso = async() =>{
 
     const users = await getUserById()
 
+    localStorage.setItem("uIdPercursos", Math.random().toString(16).slice(2))
+
+    await uploadImagePercurso()
+
    const info = {
-        id : Math.random().toString(16).slice(2),
+        id : localStorage.getItem("uIdPercursos"),
         Nome: document.getElementById("nomepercurso").value,
         Descricao: document.getElementById("descricaopercurso").value,
         DataCriacao: currentDay,
         DataInicio : document.getElementById("dataInicio").value,
         HoraInicio : document.getElementById("horaInicio").value,
         NomeCriador : users.FirstName,
-        photoCriador : users.photoURL
+        photoCriador : users.photoURL,
+        photoPercurso : localStorage.getItem("photoPercursos")
     }
-
-        await setDoc(doc(collection(db, "newPercursos"), info.id), info)
-        console.log("Sucesso")
-        alert("Criado com sucesso!")
-
+        try {
+            await setDoc(doc(collection(db, "newPercursos"), info.id), info)
+            console.log("Sucesso")
+            alert("Criado com sucesso!")
+        } catch (error) {
+            console.log(error)
+        }
 }
 
 const getPercursos = async() =>{
