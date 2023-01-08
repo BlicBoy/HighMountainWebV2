@@ -87,8 +87,6 @@ const registerClient = async() =>{
 
 const uploadImage = async() =>{
 
-
-
     const file = document.getElementById("photo").files[0]
     const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uId") + file.name )
 
@@ -138,8 +136,6 @@ const saveCliente = async() =>{
 }
 
 
-
-
 const saveSaude = async() =>{
     const SaudeInfo ={
         tipodeSangue : document.getElementById("tp-sangue").value,
@@ -167,6 +163,7 @@ const getUserSaude = async() =>{
     }
 }
 
+
 const dataSaudeUser = async(doc) =>{
     document.getElementById("alergias").value = doc.alergias
     document.getElementById("doencas").value = doc.doencas
@@ -186,8 +183,6 @@ const getUserById = async() =>{
 }
 
 
-
-
 const dataCurrentUser = async(doc) =>{
     document.getElementById("firstname-profile").value = doc.FirstName
     document.getElementById("lastname-profile").value = doc.LastName
@@ -198,10 +193,7 @@ const dataCurrentUser = async(doc) =>{
 
 
     localStorage.setItem("role", doc.role)
-
-
 }
-
  
 
 const viewImage = async(data) =>{
@@ -242,30 +234,54 @@ const editInfo = async() =>{
 }
 
 
+const uploadImagePercurso = async() =>{
+
+    const file = document.getElementById("photo").files[0]
+    const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uId") + file.name )
+
+    // Create file metadata including the content type
+    /** @type {any} */
+
+    const metadata = {
+        contentType: 'image/jpeg, image/png, image/jpg',
+    };
+
+    uploadBytes(storageRef, file, metadata).then((snapshot) =>{
+        console.log("Upload Image" + snapshot)
+        localStorage.setItem("photoURL", localStorage.getItem("uId") + file.name )
+    })
+}
+
+
 const createPercurso = async() =>{
-  // const info = {
-  //     id : Math.random().toString(16).slice(2),
-  //     Nome: document.getElementById("nome-percurso").value,
-  //     Descricao: document.getElementById("descricao-percurso").value,
-  //     DataCriacao: currentDay,
-  //     DataInicio : document.getElementById("data-percurso").value,
-  //     HoraInicio : document.getElementById("hora-percurso").value,
-  //     Criador: localStorage.getItem("uId")
-  // }
 
+    const users = await getUserById()
 
-  // try {
-  //     await setDoc(doc(collection(db, "newPercursos"), info.id), info)
-  //     console.log("Sucesso")
-  //     alert("Criado com sucesso!")
-  //     window.location.href = "percursos.html"
-  // } catch (error) {
-  //     console.log(error)
-  // }
+   const info = {
+        id : Math.random().toString(16).slice(2),
+        Nome: document.getElementById("nomepercurso").value,
+        Descricao: document.getElementById("descricaopercurso").value,
+        DataCriacao: currentDay,
+        DataInicio : document.getElementById("dataInicio").value,
+        HoraInicio : document.getElementById("horaInicio").value,
+        NomeCriador : users.FirstName,
+        photoCriador : users.photoURL
+    }
+
+        await setDoc(doc(collection(db, "newPercursos"), info.id), info)
+        console.log("Sucesso")
+        alert("Criado com sucesso!")
 
 }
 
 const getPercursos = async() =>{
+    try{
+        const docSnap = await getDocs(doc(db, "newPercursos", localStorage.getItem(info.id)))
+        console.log(docSnap.data())
+        return docSnap.data()
+    }catch(error){
+        console.log(error)
+    }
 }
 
 const logout = async() =>{
@@ -293,6 +309,7 @@ if(window.location.pathname == "/index.html"){
         if(window.location.pathname == "/profileUser.html"){
         console.log(localStorage.getItem("uId"))
 
+            document.getElementById("save-percurso").addEventListener("click", createPercurso)
             
             document.getElementById("logout-btn").addEventListener("click", logout)
 
@@ -310,8 +327,8 @@ if(window.location.pathname == "/index.html"){
             if(window.location.pathname == "/saudeCliente.html" ){
                
             }else{
-                if(window.location.pathname =="/criarPercursos.html"){
-                    document.getElementById("save_percursos").addEventListener("click", createPercurso)
+                if(window.location.pathname == "/criarPercursos.html"){
+                   
                 }else{
                     if(window.location.pathname == "/percursos.html"){
                         getPercursos()
