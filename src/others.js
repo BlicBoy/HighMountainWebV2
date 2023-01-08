@@ -9,7 +9,7 @@ const SendRegister = async() =>{
 
 const SendLogin = async() =>{
     console.log("Login Open")
-    window.location.href = "./index.html"
+    window.location.href = "./loginregisto.html"
 }
 
 const SendPerfilUser = async() =>{
@@ -57,7 +57,7 @@ const sendListClientesAdmin = async() =>{
     window.location.href ="./listClientes.html"
 }
 
-if(window.location.pathname == "index.html"){
+if(window.location.pathname == "loginregisto.html"){
     document.getElementById("register").addEventListener("click", SendRegister)
 }else{
     if(window.location.pathname == "/register.html"){

@@ -304,7 +304,7 @@ const logout = async() =>{
 
 
 
-if(window.location.pathname == "/index.html"){
+if(window.location.pathname == "/login.html"){
     
     document.getElementById("btn-entrar-login").addEventListener("click", login)
     
