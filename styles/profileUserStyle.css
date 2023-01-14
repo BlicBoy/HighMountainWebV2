@@ -81,3 +81,31 @@ body{margin-top:20px;
   white-space: nowrap;
 }
 
+.box {
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.b .list {
+    overflow: auto;
+    width: 100%;
+    min-height: 100%;
+    max-height: 600px;
+    margin: 0px 10px 0px 0px;
+    font-size: var(--font-size);
+    line-height: var(--font-size);
+    font-family: var(--font-face);
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: var(--form-bg);
+}
+
+@media screen and (max-width: 600px) {
+    .wrapper {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 100%;
+    }
+
+}

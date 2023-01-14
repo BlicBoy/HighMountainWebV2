@@ -64,15 +64,7 @@ if(window.location.pathname == "loginregisto.html"){
    
     }else{
         if(window.location.pathname == "/profileUser.html"){
-           // verifySession()
-            const admin = verifyAdmin()
 
-            if(admin){
-                document.getElementById("administrador-clientes").style = "display: block"
-            }
-            document.getElementById("administrador-clientes").addEventListener("click", sendListClientesAdmin)
-            document.getElementById("administrador-percursos").addEventListener("click", SendPercursos)
-            document.getElementById("saude-information").addEventListener("click", SendSaude)
         }else{
 
             if(window.location.pathname == "/percursos.html"){

@@ -1,36 +1,34 @@
+import { viewImage } from "./index.js"
 
 
-
-const addPercursosToList = async(doc) =>{
-    let percursos = doc.data();
+const addPercursoToList = async (doc) => {
+    
+    let percurso = await doc.data()
     let html = "";
 
 
-    html += "<tr>"
-    html += "<td>" +doc.Nome+ "</td>"
-    html += "<td>" +doc.Descricao+ "</td>"
-    html += "<td>" + doc.DataInicio + "</td>"
-    html += "<td>" + doc.HoraInicio + "</td>"
-    html += "<td> + </td>"
-    html += "<td> x </td>"
-    
+    console.log(percurso.photoPercurso)
+    await viewImage(percurso.photoPercurso, "percurso-imagem")
+    html += "<img class ='col-md-4 img-fluid' id = 'percurso-imagem' src=''>";
+    html += "<p> Nome = '" + percurso.Nome + "</p> ";
+    html += "<p> Data de Início = '" + percurso.DataInicio + "</p>";
+    html += "<p> Hora de Início = '" + percurso.HoraInicio + "</p>";
+    html += "<p> Nome do Instrutor = '" + percurso.NomeCriador + "</p>";
 
-    html += "</tr>"
-    
+    html += "<hr>";
 
-
-    return html
+    return html;
 }
 
 
+const listPercursos2 = async (data) => {
 
-const listPercursos = async (data) =>{
-    const list = document.querySelector("#list")
+    const list = document.getElementById("list");
 
-    const html = await addPercursosToList(data)
+    const html = await addPercursoToList(data);
+    
+    list.innerHTML +=  html;
+}  
 
-    list.innerHTML += html
-} 
 
-
-export {addPercursosToList, listPercursos}
+export { listPercursos2 }

@@ -32,10 +32,7 @@ import {
 
 
 import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
-
-
-
-import{addPercursosToList, listPercursos} from "./listPercursos.js"
+import{ listPercursos2} from "./listPercursos.js"
 
 const auth = getAuth(firebaseConfig)
 const db = getFirestore(firebaseConfig)
@@ -189,23 +186,25 @@ const dataCurrentUser = async(doc) =>{
     document.getElementById("datanasc-profile").value = doc.dataNascimento
     document.getElementById("phone-profile").value = doc.numeroTelemovel
     document.getElementById("sexualidade").value = doc.sexualidade
-    viewImage(doc.photoURL)
+    viewImage(doc.photoURL,"imagem-perfil")
 
 
     localStorage.setItem("role", doc.role)
 }
  
 
-const viewImage = async(data) =>{
+const viewImage = async(data,local) =>{
     getDownloadURL(ref(storage, "newUserPhotos/" + data))
         .then((url) =>{
             console.log("Foto carregada com sucesso")
-            document.getElementById("imagem-perfil").setAttribute('src', url)
+            document.getElementById(local).setAttribute('src', url)
         })
         .catch((error) =>{
             console.log(error)
         })
 }
+
+export{viewImage}
 
 const dataEditUser = async () =>{
     const data = {
@@ -251,6 +250,8 @@ const uploadImagePercurso = async() =>{
         console.log("Upload Image" + snapshot)
         localStorage.setItem("photoPercursos", localStorage.getItem("uIdPercursos") + file.name )
     })
+
+    console.log(localStorage.getItem("photoPercursos"))
 }
 
 
@@ -271,10 +272,16 @@ const createPercurso = async() =>{
         HoraInicio : document.getElementById("horaInicio").value,
         NomeCriador : users.FirstName,
         photoCriador : users.photoURL,
-        photoPercurso : localStorage.getItem("photoPercursos")
+        photoPercurso : localStorage.getItem("photoPercursos"),
+        IdCriador : localStorage.getItem("uId")
     }
+
+
+
         try {
             await setDoc(doc(collection(db, "newPercursos"), info.id), info)
+            
+            getPercursos();
             console.log("Sucesso")
             alert("Criado com sucesso!")
         } catch (error) {
@@ -282,15 +289,23 @@ const createPercurso = async() =>{
         }
 }
 
-const getPercursos = async() =>{
-    try{
-        const docSnap = await getDocs(doc(db, "newPercursos", localStorage.getItem(info.id)))
-        console.log(docSnap.data())
-        return docSnap.data()
-    }catch(error){
-        console.log(error)
-    }
+
+const getPercursos = async () =>{
+
+        console.log("listar")
+        const list = document.querySelector("#list")
+        list.innerHTML = ""
+        console.log(list)
+        const q = await query(collection(db, "newPercursos"))
+        const querySnapshot = await getDocs(q)
+        console.log(querySnapshot);
+        querySnapshot.forEach((doc) => {
+            console.log(doc.data());
+            listPercursos2(doc)
+    })
 }
+
+
 
 const logout = async() =>{
     auth.signOut().then((on)=>{
@@ -331,6 +346,11 @@ if(window.location.pathname == "/login.html"){
             document.getElementById("save-information").addEventListener("click", editInfo)
 
             document.getElementById("salvar-saude").addEventListener("click", saveSaude)
+
+            await getPercursos()
+
+
+
         }else{
             if(window.location.pathname == "/saudeCliente.html" ){
                
@@ -339,7 +359,7 @@ if(window.location.pathname == "/login.html"){
                    
                 }else{
                     if(window.location.pathname == "/percursos.html"){
-                        getPercursos()
+                       
                     }
                 }
             }
