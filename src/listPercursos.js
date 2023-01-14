@@ -12,7 +12,10 @@ const addPercursoToList = async (doc) => {
     //html += "<img class ='col-md-4 img-fluid' id = 'percurso-imagem' src=''>";
     html += "<hr>";
     html += "<span class=''>" + percurso.Nome + "</span>";
-    html += "<button class='btn btn-primary float-right'> Saber Mais </button>"
+    html += "<button class='btn-7'> Saber Mais </button>"
+
+    
+
     //html += "<p> Data de Início = '" + percurso.DataInicio + "</p>";
     //html += "<p> Hora de Início = '" + percurso.HoraInicio + "</p>";
     //html += "<p> Nome do Instrutor = '" + percurso.NomeCriador + "</p>";

@@ -61,7 +61,6 @@ const login = async() => {
 }
 
 
-
 const registerClient = async() =>{
 
 
@@ -114,7 +113,6 @@ const newUser = async () =>{
     }
     return ClientInfo
 }
-
 
 
 const saveCliente = async() =>{
@@ -204,6 +202,7 @@ const viewImage = async(data,local) =>{
         })
 }
 
+
 export{viewImage}
 
 const dataEditUser = async () =>{
@@ -218,6 +217,7 @@ const dataEditUser = async () =>{
 
     return data
 }
+
 
 const editInfo = async() =>{
     const info = await dataEditUser()
@@ -275,9 +275,6 @@ const createPercurso = async() =>{
         photoPercurso : localStorage.getItem("photoPercursos"),
         IdCriador : localStorage.getItem("uId")
     }
-
-
-
         try {
             await setDoc(doc(collection(db, "newPercursos"), info.id), info)
             
@@ -306,7 +303,6 @@ const getPercursos = async () =>{
 }
 
 
-
 const logout = async() =>{
     auth.signOut().then((on)=>{
         console.log("Sair")
@@ -316,7 +312,6 @@ const logout = async() =>{
         console.log(error)
     })
 }
-
 
 
 if(window.location.pathname == "/login.html"){
@@ -348,8 +343,6 @@ if(window.location.pathname == "/login.html"){
             document.getElementById("salvar-saude").addEventListener("click", saveSaude)
 
             await getPercursos()
-
-
 
         }else{
             if(window.location.pathname == "/saudeCliente.html" ){
