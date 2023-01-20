@@ -61,7 +61,7 @@ const login = async() => {
 }
 
 
-const registerClient = async() =>{
+const registerClient = async() => {
 
 
     let email = document.getElementById("email-register").value
@@ -81,7 +81,7 @@ const registerClient = async() =>{
 }
  
 
-const uploadImage = async() =>{
+const uploadImage = async() => {
 
     const file = document.getElementById("photo").files[0]
     const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uId") + file.name )
@@ -100,22 +100,26 @@ const uploadImage = async() =>{
 }
 
 
-const newUser = async () =>{
+const newUser = async () => {
     const ClientInfo = {
         uId : localStorage.getItem("uId"),
+        photoURL : localStorage.getItem("photoURL"),
         FirstName : document.getElementById("firstname-register").value,
         LastName : document.getElementById("lastname-register").value,
         dataNascimento : document.getElementById("datanasc-register").value,
         numeroTelemovel : document.getElementById("phone-register").value,
         sexualidade : document.getElementById("sexualidade").value,
-        photoURL : localStorage.getItem("photoURL"),
-        role : "Cliente"
+        role : "Cliente",
+        alergias : document.getElementById("alergias").value,
+        doencas : document.getElementById("doencas").value,
+        tipodeSangue : document.getElementById("tp-sangue").value
     }
+
     return ClientInfo
 }
 
 
-const saveCliente = async() =>{
+const saveCliente = async() => {
     const info  = await newUser()
 
     try{
@@ -131,7 +135,7 @@ const saveCliente = async() =>{
 }
 
 
-const saveSaude = async() =>{
+/*const saveSaude = async() =>{
     const SaudeInfo ={
         tipodeSangue : document.getElementById("tp-sangue").value,
         doencas : document.getElementById("doencas").value,
@@ -145,28 +149,11 @@ const saveSaude = async() =>{
         console.log(error)
     }
 
-} 
+}*/
 
 
-const getUserSaude = async() =>{
-    try{
-        const docSnap = await getDocs(doc(db, "newUsers", localStorage.getItem("uId"),"/Saude"))
-        console.log(docSnap.data())
-        return docSnap.data()
-    }catch(error){
-        console.log(error)
-    }
-}
 
-
-const dataSaudeUser = async(doc) =>{
-    document.getElementById("alergias").value = doc.alergias
-    document.getElementById("doencas").value = doc.doencas
-    document.getElementById("tp-sangue").value = doc.tipodeSangue
-}
-
-
-const getUserById = async() =>{
+const getUserById = async() => {
     try {
         const docSnap = await getDoc(doc(db, "newUsers", localStorage.getItem("uId")))
         console.log(docSnap.data())
@@ -179,12 +166,15 @@ const getUserById = async() =>{
 
 
 const dataCurrentUser = async(doc) =>{
+    viewImage(doc.photoURL,"imagem-perfil")
     document.getElementById("firstname-profile").value = doc.FirstName
     document.getElementById("lastname-profile").value = doc.LastName
     document.getElementById("datanasc-profile").value = doc.dataNascimento
     document.getElementById("phone-profile").value = doc.numeroTelemovel
     document.getElementById("sexualidade").value = doc.sexualidade
-    viewImage(doc.photoURL,"imagem-perfil")
+    document.getElementById("doencas").value = doc.doencas
+    document.getElementById("alergias").value = doc.alergias
+    document.getElementById("tp-sangue").value = doc.tipodeSangue
 
 
     localStorage.setItem("role", doc.role)
@@ -202,17 +192,17 @@ const viewImage = async(data,local) =>{
         })
 }
 
+export { viewImage }
 
-export{viewImage}
 
 const dataEditUser = async () =>{
     const data = {
+        photoURL: localStorage.getItem("urlPhoto"),
         FirstName:  document.getElementById("firstname-profile").value,
         LastName :  document.getElementById("lastname-profile").value,
         dataNascimento: document.getElementById("datanasc-profile").value,
         numeroTelemovel:  document.getElementById("phone-profile").value,
-        sexualidade: document.getElementById("sexualidade").value,
-        photoURL: localStorage.getItem("urlPhoto")
+        sexualidade: document.getElementById("sexualidade").value
     }
 
     return data
@@ -239,7 +229,6 @@ const uploadImagePercurso = async() =>{
     const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uIdPercursos") + file.name )
     console.log(storageRef)
 
-    // Create file metadata including the content type
     /** @type {any} */
 
     const metadata = {
@@ -335,11 +324,9 @@ if(window.location.pathname == "/login.html"){
 
 
 
-            const saude = await getUserSaude()
-            dataSaudeUser(saude)
             document.getElementById("save-information").addEventListener("click", editInfo)
 
-            document.getElementById("salvar-saude").addEventListener("click", saveSaude)
+            document.getElementById("salvar-saude"),addEventListener("click",editInfo )
 
             await getPercursos()
 
