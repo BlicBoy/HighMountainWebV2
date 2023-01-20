@@ -109,3 +109,9 @@ body{margin-top:20px;
     }
 
 }
+
+
+.list_lu {
+    height: 300px;
+    overflow: auto;
+}

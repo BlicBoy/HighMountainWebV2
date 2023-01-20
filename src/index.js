@@ -288,7 +288,6 @@ const createPercurso = async() =>{
 
 
 const getPercursos = async () =>{
-
         console.log("listar")
         const list = document.querySelector("#list")
         list.innerHTML = ""
