@@ -1,4 +1,4 @@
-let uid = localStorage.getItem("uId");
+let uid = localStorage.getItem("uId")
 let role = localStorage.getItem("role")
 
 
@@ -44,13 +44,7 @@ const verifySession = async() =>{
     }
 }
 
-const verifyAdmin = async() =>{
-    if(role == "Administrador"){
-        return true
-    }else{
-        return false
-    }
-}
+
 
 
 const sendListClientesAdmin = async() =>{
@@ -68,7 +62,6 @@ if(window.location.pathname == "loginregisto.html"){
         }else{
 
             if(window.location.pathname == "/percursos.html"){
-                console.log("AQUI")
                 document.getElementById("criarPercurso").addEventListener("click", SendCriarPercursos)
             }   
             else{

@@ -301,6 +301,14 @@ const logout = async() =>{
     })
 }
 
+const verifyAdmin = async() =>{
+    if(role == "Administrador"){
+        return true
+    }else{
+        return false
+    }
+}
+
 
 if(window.location.pathname == "/login.html"){
     
@@ -321,8 +329,6 @@ if(window.location.pathname == "/login.html"){
 
             const info = await getUserById()
             dataCurrentUser(info)
-
-
 
             document.getElementById("save-information").addEventListener("click", editInfo)
 
