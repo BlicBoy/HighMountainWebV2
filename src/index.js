@@ -150,9 +150,9 @@ const datanewUser = async() =>{
   console.log(ClienteInfo)
   //envia os dados para o firebase
   try{
-    //await setDoc(doc(collection(db, "newUsers"), uidUser), ClienteInfo)
+    await setDoc(doc(collection(db, "newUsers"), uidUser), ClienteInfo)
     console.log("Sucesso!")
-    //window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
+    window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
 
   }catch(error){
     console.log(error)
