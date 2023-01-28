@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/HighMountain.png">
     <link rel="stylesheet" href="./styles/style-plataform.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -64,8 +65,24 @@
                         <option value="Não Binário">Prefiro não dizer</option>
                     </select>
                     <p></p>
-                    <input type="file" id="photo" class="form-control">
+                    <input type="file" id="photo-register" class="form-control">
                     <p></p>
+                    <select id="tp-sangue-register" name="tp-sangue-register" class="form-control">
+                      <option disabled selected>Tipo de Sangue</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                  </select>
+                  <p></p>
+                  <input name="doencas-register" id="doencas-register" class="form-control" type="text" placeholder="Doenças">
+                  <p></p>
+                  <input name="alergias-register" id="alergias-register" class="form-control" type="text" placeholder="Alergias">
+                  <p></p>
         
                     <button id="save-info-cliente" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Registar</button>
                     <div class="text-center text-lg-start mt-4 pt-2">
