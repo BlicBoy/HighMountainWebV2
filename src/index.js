@@ -32,7 +32,7 @@ import {
 
 
 import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
-//import{ listPercursos2} from "./listPercursos.js"
+//import{ listClientes2 } from "./listClients.js"
 
 
 
@@ -43,7 +43,7 @@ let today = new Date()
 let currentDay = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
 let uidUser = "noID"
 var log = false
-var linkPhoto = "noPhoto"
+let linkPhoto = "noPhoto"
 
 
 //vai buscar todos os dados do utilizador que fez login
@@ -86,6 +86,24 @@ const login = async() => {
     }
 }
 
+
+//vai dar upload a foto do register.html
+const uploadPhotoRegister = async() =>{
+    const files = document.getElementById("photo-register").files[0]
+    const storageRef = ref(storage, "newUserPhotos/"+ uid + files.name)
+
+     /** @type {any} */
+    const metadata = {
+      contentType: 'image/jpeg, image/png, image/jpg',
+  }
+
+  uploadBytes(storageRef, files, metadata).then((snapshot) =>{
+    console.log("Upload Image" + snapshot)
+    linkPhoto = uidUser + files.name
+  })
+}
+
+
 //registro de um novo cliente
 const registerClient = async() => {
 
@@ -112,23 +130,6 @@ const registerClient = async() => {
 }
 
 
-//vai dar upload a foto do register.html
-const uploadPhotoRegister = async() =>{
-    const files = document.getElementById("photo-register").files[0]
-    const storageRef = ref(storage, "newUserPhotos/"+ uid + files.name)
-
-     /** @type {any} */
-    const metadata = {
-      contentType: 'image/jpeg, image/png, image/jpg',
-  }
-
-  uploadBytes(storageRef, files, metadata).then((snapshot) =>{
-    console.log("Upload Image" + snapshot)
-    linkPhoto = uidUser + files.name
-  })
-}
-
-
 //salva os dados no registro de um novo utilizador
 const datanewUser = async() =>{
 
@@ -151,6 +152,8 @@ const datanewUser = async() =>{
   //envia os dados para o firebase
   try{
     await setDoc(doc(collection(db, "newUsers"), uidUser), ClienteInfo)
+
+    getClientes()
     console.log("Sucesso!")
     window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
 
@@ -160,11 +163,19 @@ const datanewUser = async() =>{
 }
 
 
-
-
-
-
-
+const getClientes = async () =>{
+    console.log("listar")
+    const list = document.querySelector("#listClient")
+    list.innerHTML = ""
+    console.log(list)
+    const q = await query(collection(db, "newUsers"))
+    const querySnapshot = await getDocs(q)
+    console.log(querySnapshot);
+    querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        listClientes2(doc)
+  })
+}
 
 
 //saber qual é a pagina
@@ -175,6 +186,10 @@ switch(window.location.pathname) {
 
   case "/register.html":
     document.getElementById("save-info-cliente").addEventListener("click", registerClient)
+    break;
+
+  case "/listClients.html":
+    getClientes()
     break;
  
   default:
