@@ -232,6 +232,7 @@ const updatePhoto = async()=>{
         await updateDoc(doc(db,"newUsers", localStorage.getItem("uidUser")), data)
         viewImage(data.photoURL, "imagem-perfil")
         document.getElementById("photo").value = ""
+        alert('Imagem atualizada com sucesso!')
       }else{
         alert('Nenhuma imagem selecionada!')
       }
@@ -239,6 +240,42 @@ const updatePhoto = async()=>{
     }catch(error){
       console.log(error.code + " " +error.message)
     }
+}
+
+//update detalhes da conta
+const updateDetailsAccount = async()=>{
+
+  try{
+      const info = {
+        FirstName:  document.getElementById("firstname-profile").value,
+        LastName :  document.getElementById("lastname-profile").value,
+        dataNascimento: document.getElementById("datanasc-profile").value,
+        numeroTelemovel:  document.getElementById("phone-profile").value,
+        sexualidade: document.getElementById("sexualidade").value
+      }
+      await updateDoc(doc(db,"newUsers", localStorage.getItem("uidUser")), info)
+      alert('Detalhes da conta alterados com sucesso!')
+  }catch(error){
+    console.log(error.code + " " +error.message)
+  }
+
+}
+
+//update a parte da saude
+const updateSaudeAccount = async() =>{
+  try{
+    const info = {
+      doencas : document.getElementById("doencas").value,
+      alergias : document.getElementById("alergias").value,
+      tipodeSangue : document.getElementById("tp-sangue").value
+    }
+
+    await updateDoc(doc(db, "newUsers", localStorage.getItem("uidUser")), info)
+    alert('Dados de Saúde alterados com sucesso!')
+
+  }catch(error){
+      console.log(error.code +" "+error.message)
+  }
 }
 
 
@@ -270,6 +307,8 @@ switch(window.location.pathname) {
   case "/profileAdmin.html":
     document.getElementById("save-information-photo").addEventListener("click", updatePhoto)
     document.getElementById("logout-btn").addEventListener("click", logout)
+    document.getElementById("save-information").addEventListener("click", updateDetailsAccount)
+    document.getElementById("salvar-saude").addEventListener("click", updateSaudeAccount)
     completeLoginUser()
     break;
 
