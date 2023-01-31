@@ -343,6 +343,11 @@ const insertActivity = async()=>{
 }
 
 
+//enviar administador para a listagem dos clientes
+const sendListCliente = () =>{
+  window.location.href = "/listClients.html"
+}
+
 //logout
 const logout = async() =>{
     auth.signOut().then((on) =>{
@@ -379,6 +384,7 @@ switch(window.location.pathname) {
     completeLoginUser()
     getPercursos()
     document.getElementById("save-percurso").addEventListener("click", insertActivity)
+    document.getElementById("administrador-clientes").addEventListener("click", sendListCliente)
     break;
 
   case "/listClients.html":
