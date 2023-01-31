@@ -361,11 +361,6 @@ const logout = async() =>{
 }
 
 
-
-
-
-
-
 //saber qual é a pagina
 switch(window.location.pathname) {
   case "/login.html":

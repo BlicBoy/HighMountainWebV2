@@ -5,20 +5,22 @@ const addClientesToList = async (doc) => {
     let cliente = await doc.data()
     let html = "";
 
-   
-    //html += "<img class ='col-sm-5 img-fluid rounded' alt='Responsive image' id = 'percurso-imagem_" + photoURL.id + "' src=''>"
+    if(cliente.role == "Cliente"){
+        html += "<p>"
+        viewImage(cliente.photoURL, "cliente_photo")
+        html += "<img class ='col-sm-5 img-fluid rounded' alt='Responsive image' id = 'cliente_photo' width = '200px' height = '300px'>"
 
-    html += "<p>"
+        html += "<p class='float:right'>" + cliente.FirstName + " " +cliente.LastName + "</p>"
+        html += "<p> Data Nascimento : " + cliente.dataNascimento + "</p>"
+        html += "<p> Numero Telemovel : " + cliente.numeroTelemovel + "</p>"
+        html += "<p> Doenças : " + cliente.doencas + "</p>"
+        html += "<p> Alergias : " + cliente.alergias + "</p>"
+        html += "<p> Tipo de Sangue : " + cliente.tipodeSangue + "</p>"
+    
+        html += "<hr>"
+    }
+    
 
-    html += "<p class='float:right'>" + cliente.FirstName + "</p>"
-
-    html += "<p> Data de Início = '" + cliente.LastName + "</p>"
-    html += "<p> Hora de Início = '" + cliente.DataNascimento + "</p>"
-    html += "<p> Nome do Instrutor = '" +  + "</p>"
-
-   // await viewImage(percurso.photoPercurso, "percurso-imagem_" + percurso.id)
-
-    html += "<hr>"
 
     console.log(html)
 
