@@ -1,3 +1,5 @@
+
+//imports firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 
 const firebaseConfig = initializeApp({
@@ -32,8 +34,12 @@ import {
 
 
 import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
+
+
+//imports internos
 import{ listClientes2 } from "./listClients.js"
 
+import{listPercursos2} from "./listPercursos.js"
 
 
 const auth = getAuth(firebaseConfig)
@@ -205,10 +211,10 @@ const completeLoginUser = async()=>{
 }
 
 //dá upload a qualquer foto basta passar o id pelo argumento
-const uploadAllPhotos = async (local) =>{
+const uploadAllPhotos = async (id, local) =>{
 
   const files = document.getElementById(local).files[0]
-  const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uidUser") + files.name)
+  const storageRef = ref(storage, "newUserPhotos/"+ id + files.name)
 
    /** @type {any} */
   const metadata = {
@@ -228,7 +234,7 @@ const updatePhoto = async()=>{
         const data = {
           photoURL: localStorage.getItem("uidUser") + document.getElementById("photo").files[0].name
         }
-        uploadAllPhotos("photo")
+        uploadAllPhotos(localStorage.getItem("uidUser"),"photo")
         await updateDoc(doc(db,"newUsers", localStorage.getItem("uidUser")), data)
         viewImage(data.photoURL, "imagem-perfil")
         document.getElementById("photo").value = ""
@@ -279,6 +285,64 @@ const updateSaudeAccount = async() =>{
 }
 
 
+
+//listar percursos
+const getPercursos = async () =>{
+  console.log("listar")
+  const list = document.querySelector("#list")
+  list.innerHTML = ""
+  console.log(list)
+  const q = await query(collection(db, "newPercursos"))
+  const querySnapshot = await getDocs(q)
+  console.log(querySnapshot);
+  querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+      listPercursos2(doc)
+})
+}
+
+//inserir percursos
+const insertActivity = async()=>{
+  
+  try {
+    if(document.getElementById("photoPercursos").files[0] != undefined){
+      const users = await dataUserLogin()
+      var id_generate = Math.random().toString(16).slice(2)
+      uploadAllPhotos(id_generate,"photoPercursos")
+      
+      const info = {
+        id : id_generate,
+        Nome: document.getElementById("nomepercurso").value,
+        Descricao: document.getElementById("descricaopercurso").value,
+        DataCriacao: currentDay,
+        DataInicio : document.getElementById("dataInicio").value,
+        HoraInicio : document.getElementById("horaInicio").value,
+        NomeCriador : users.FirstName,
+        photoCriador : users.photoURL,
+        photoPercurso : id_generate + document.getElementById("photoPercursos").files[0].name,
+        IdCriador : localStorage.getItem("uidUser")
+      }
+
+      await setDoc(doc(collection(db,"newPercursos"), id_generate), info)
+      getPercursos()
+      alert('Percurso Criado com sucesso!')
+
+      
+    }else{
+      alert('Existem campos em falta')
+    }
+      
+
+  } catch (error) {
+    console.log(error.code +" "+error.message)
+  }
+  
+  
+
+
+}
+
+
 //logout
 const logout = async() =>{
     auth.signOut().then((on) =>{
@@ -290,6 +354,9 @@ const logout = async() =>{
       console.log(error)
     })
 }
+
+
+
 
 
 
@@ -310,6 +377,8 @@ switch(window.location.pathname) {
     document.getElementById("save-information").addEventListener("click", updateDetailsAccount)
     document.getElementById("salvar-saude").addEventListener("click", updateSaudeAccount)
     completeLoginUser()
+    getPercursos()
+    document.getElementById("save-percurso").addEventListener("click", insertActivity)
     break;
 
   case "/listClients.html":
