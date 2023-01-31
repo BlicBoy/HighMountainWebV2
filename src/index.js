@@ -41,17 +41,13 @@ const db = getFirestore(firebaseConfig)
 const storage = getStorage(firebaseConfig)
 let today = new Date()
 let currentDay = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
-let uidUser = "noID"
-var log = false
-let linkPhoto = "noPhoto"
 
 
 //vai buscar todos os dados do utilizador que fez login
 //sabe qual é o utilizador pelo uidUser que ganha valor dentro da função login
 const dataUserLogin = async() =>{
     try {
-      const docSnap = await getDoc(doc(db, "newUsers", uidUser))
-      console.log(docSnap.data())
+      const docSnap = await getDoc(doc(db, "newUsers", localStorage.getItem("uidUser")))
       return docSnap.data()
       
   } catch (error) {
@@ -68,16 +64,17 @@ const login = async() => {
     .then((userCredential) =>{
 
         const user = userCredential.user
-        uidUser = user.uid
-        log = true
+        localStorage.setItem("uidUser", user.uid)
+        localStorage.setItem("log", true)
 
     }).catch((error) =>{
         console.log(error.code+ " "+ error.message)
     })
 
     //aqui recebe um boolean chamado log que é declarado como variavel global e dentro do login ganha valor de true se o login for feito com sucesso
-    if(log){
+    if(localStorage.getItem("log")){
       const user = await dataUserLogin()
+      localStorage.setItem("Role", user.role)
       if(user.role == "Administrador"){
         window.location.href = "profileAdmin.html" //redireciona para o perfil do Administrador
       }else if(user.role == "Cliente"){
@@ -90,7 +87,7 @@ const login = async() => {
 //vai dar upload a foto do register.html
 const uploadPhotoRegister = async() =>{
     const files = document.getElementById("photo-register").files[0]
-    const storageRef = ref(storage, "newUserPhotos/"+ uidUser + files.name)
+    const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uidUser") + files.name)
 
      /** @type {any} */
     const metadata = {
@@ -106,17 +103,14 @@ const uploadPhotoRegister = async() =>{
 
 //registro de um novo cliente
 const registerClient = async() => {
-
-  console.log("aqui ")
-
   let email = document.getElementById("email-register").value
   let password = document.getElementById("password-register").value
 
   createUserWithEmailAndPassword(auth, email, password) //primerio recebe o email e a password
       .then((userCredential) => {
           const user = userCredential.user //ter as credenciais do utilizador email /  Auth.id
-          uidUser = user.uid //guarda o id do utilizador
-          log = true //fica com o login feito
+          localStorage.setItem("uidUser", user.uid) //guarda o id do utilizador
+          localStorage.setItem("log", true) //fica com o login feito
           
           
       
@@ -135,11 +129,10 @@ const registerClient = async() => {
 //salva os dados no registro de um novo utilizador
 const datanewUser = async() =>{
 
-
   uploadPhotoRegister() // chama a função para guardar a foto
   //recolhe tudo dentro desta constante
   const ClienteInfo = {
-    uId : uidUser,
+    uId : localStorage.getItem("uidUser"),
     FirstName : document.getElementById("firstname-register").value,
     LastName : document.getElementById("lastname-register").value,
     dataNascimento : document.getElementById("datanasc-register").value,
@@ -149,16 +142,17 @@ const datanewUser = async() =>{
     tipodeSangue : document.getElementById("tp-sangue-register").value,
     doencas : document.getElementById("doencas-register").value,
     alergias : document.getElementById("alergias-register").value,
-    photoURL : uidUser + document.getElementById("photo-register").files[0].name
+    photoURL : localStorage.getItem("uidUser") + document.getElementById("photo-register").files[0].name
   }
 
 
+  //Guarda clientes na base de dados
+
   try{
     await setDoc(doc(collection(db, "newUsers"), uidUser), ClienteInfo)
-
     getClientes()
     console.log("Sucesso!")
-   //window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
+    window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
 
   }catch(error){
     console.log(error)
@@ -180,9 +174,6 @@ const viewImage = async(data,local) =>{
 export{ viewImage }
 
 
-
-
-
 //mostra os clientes
 const getClientes = async () =>{
     console.log("listar")
@@ -199,6 +190,71 @@ const getClientes = async () =>{
 }
 
 
+//Preenche os campos do utilizador que deu login
+const completeLoginUser = async()=>{
+    var data = await dataUserLogin()
+    viewImage(data.photoURL, "imagem-perfil")
+    document.getElementById("firstname-profile").value = data.FirstName
+    document.getElementById("lastname-profile").value = data.LastName
+    document.getElementById("datanasc-profile").value = data.dataNascimento
+    document.getElementById("phone-profile").value = data.numeroTelemovel
+    document.getElementById("sexualidade").value = data.sexualidade
+    document.getElementById("doencas").value = data.doencas
+    document.getElementById("alergias").value = data.alergias
+    document.getElementById("tp-sangue").value = data.tipodeSangue
+}
+
+//dá upload a qualquer foto basta passar o id pelo argumento
+const uploadAllPhotos = async (local) =>{
+
+  const files = document.getElementById(local).files[0]
+  const storageRef = ref(storage, "newUserPhotos/"+ localStorage.getItem("uidUser") + files.name)
+
+   /** @type {any} */
+  const metadata = {
+    contentType: 'image/jpeg, image/png, image/jpg',
+}
+
+  uploadBytes(storageRef, files, metadata).then((snapshot) =>{
+    console.log("Upload Image" + snapshot)
+  })
+}
+
+
+//update photo
+const updatePhoto = async()=>{
+    try{
+      if(document.getElementById("photo").files[0] != undefined){
+        const data = {
+          photoURL: localStorage.getItem("uidUser") + document.getElementById("photo").files[0].name
+        }
+        uploadAllPhotos("photo")
+        await updateDoc(doc(db,"newUsers", localStorage.getItem("uidUser")), data)
+        viewImage(data.photoURL, "imagem-perfil")
+        document.getElementById("photo").value = ""
+      }else{
+        alert('Nenhuma imagem selecionada!')
+      }
+
+    }catch(error){
+      console.log(error.code + " " +error.message)
+    }
+}
+
+
+//logout
+const logout = async() =>{
+    auth.signOut().then((on) =>{
+      console.log("Logout")
+      localStorage.clear()
+      window.location.href = "/login.html"
+
+    }).catch((error)=>{
+      console.log(error)
+    })
+}
+
+
 
 
 //saber qual é a pagina
@@ -211,14 +267,16 @@ switch(window.location.pathname) {
     document.getElementById("save-info-cliente").addEventListener("click", registerClient)
     break;
 
+  case "/profileAdmin.html":
+    document.getElementById("save-information-photo").addEventListener("click", updatePhoto)
+    document.getElementById("logout-btn").addEventListener("click", logout)
+    completeLoginUser()
+    break;
+
   case "/listClients.html":
      getClientes()
     break;
 
-
-  case "/profileAdmin.html":
-      document.getElementById("administrador-clientes").addEventListener("click", window.location.href= "/listClients.html")
-    break;
  
   default:
     break;
