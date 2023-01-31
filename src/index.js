@@ -90,7 +90,7 @@ const login = async() => {
 //vai dar upload a foto do register.html
 const uploadPhotoRegister = async() =>{
     const files = document.getElementById("photo-register").files[0]
-    const storageRef = ref(storage, "newUserPhotos/"+ uid + files.name)
+    const storageRef = ref(storage, "newUserPhotos/"+ uidUser + files.name)
 
      /** @type {any} */
     const metadata = {
@@ -107,6 +107,8 @@ const uploadPhotoRegister = async() =>{
 //registro de um novo cliente
 const registerClient = async() => {
 
+  console.log("aqui ")
+
   let email = document.getElementById("email-register").value
   let password = document.getElementById("password-register").value
 
@@ -117,7 +119,7 @@ const registerClient = async() => {
           log = true //fica com o login feito
           
           
-          uploadPhotoRegister() // chama a função para guardar a foto
+      
           datanewUser() //guarda tudo depois
       }).catch((error) =>{
           console.log(error.code+ " " +error.message)
@@ -133,6 +135,8 @@ const registerClient = async() => {
 //salva os dados no registro de um novo utilizador
 const datanewUser = async() =>{
 
+
+  uploadPhotoRegister() // chama a função para guardar a foto
   //recolhe tudo dentro desta constante
   const ClienteInfo = {
     uId : uidUser,
@@ -145,17 +149,16 @@ const datanewUser = async() =>{
     tipodeSangue : document.getElementById("tp-sangue-register").value,
     doencas : document.getElementById("doencas-register").value,
     alergias : document.getElementById("alergias-register").value,
-    photoURL : linkPhoto.toString()
+    photoURL : uidUser + document.getElementById("photo-register").files[0].name
   }
 
-  console.log(ClienteInfo)
-  //envia os dados para o firebase
+
   try{
     await setDoc(doc(collection(db, "newUsers"), uidUser), ClienteInfo)
 
     getClientes()
     console.log("Sucesso!")
-    window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
+   //window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
 
   }catch(error){
     console.log(error)
@@ -200,11 +203,11 @@ const getClientes = async () =>{
 
 //saber qual é a pagina
 switch(window.location.pathname) {
-  case "./login.html":
+  case "/login.html":
     document.getElementById("btn-entrar-login").addEventListener("click", login)  
     break;
 
-  case "./register.html":
+  case "/register.html":
     document.getElementById("save-info-cliente").addEventListener("click", registerClient)
     break;
 
