@@ -32,7 +32,7 @@ import {
 
 
 import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
-//import{ listClientes2 } from "./listClients.js"
+import{ listClientes2 } from "./listClients.js"
 
 
 
@@ -162,7 +162,25 @@ const datanewUser = async() =>{
   }
 }
 
+//ver imagem
+const viewImage = async(data,local) =>{
+  getDownloadURL(ref(storage, "newUserPhotos/"+ data))
+    .then((url)=>{
+      document.getElementById(local).setAttribute('src', url)
+    })
+    .catch((error) =>{
+      console.log(error)
+    })
+}
 
+//da export da função de ver a imagem
+export{ viewImage }
+
+
+
+
+
+//mostra os clientes
 const getClientes = async () =>{
     console.log("listar")
     const list = document.querySelector("#listClient")
@@ -178,18 +196,25 @@ const getClientes = async () =>{
 }
 
 
+
+
 //saber qual é a pagina
 switch(window.location.pathname) {
-  case "/login.html":
+  case "./login.html":
     document.getElementById("btn-entrar-login").addEventListener("click", login)  
     break;
 
-  case "/register.html":
+  case "./register.html":
     document.getElementById("save-info-cliente").addEventListener("click", registerClient)
     break;
 
   case "/listClients.html":
-    getClientes()
+     getClientes()
+    break;
+
+
+  case "/profileAdmin.html":
+      document.getElementById("administrador-clientes").addEventListener("click", window.location.href= "/listClients.html")
     break;
  
   default:

@@ -1,4 +1,4 @@
-//import { viewImage } from "./index.js"
+import { viewImage } from "./index.js"
 
 const addClientesToList = async (doc) => {
     
@@ -6,7 +6,7 @@ const addClientesToList = async (doc) => {
     let html = "";
 
    
-    html += "<img class ='col-sm-5 img-fluid rounded' alt='Responsive image' id = 'percurso-imagem_" + photoURL.id + "' src=''>"
+    //html += "<img class ='col-sm-5 img-fluid rounded' alt='Responsive image' id = 'percurso-imagem_" + photoURL.id + "' src=''>"
 
     html += "<p>"
 
@@ -16,9 +16,11 @@ const addClientesToList = async (doc) => {
     html += "<p> Hora de Início = '" + cliente.DataNascimento + "</p>"
     html += "<p> Nome do Instrutor = '" +  + "</p>"
 
-    await viewImage(percurso.photoPercurso, "percurso-imagem_" + percurso.id)
+   // await viewImage(percurso.photoPercurso, "percurso-imagem_" + percurso.id)
 
     html += "<hr>"
+
+    console.log(html)
 
     return html;
 }
@@ -36,4 +38,4 @@ const listClientes2 = async (data) => {
 }  
 
 
-//export { listClientes2 }
+export { listClientes2 }
