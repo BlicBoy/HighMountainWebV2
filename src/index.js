@@ -39,7 +39,7 @@ import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstati
 //imports internos
 import{ listClientes2 } from "./listClients.js"
 
-import{listPercursos2} from "./listPercursos.js"
+import{listPercursos2, listPercursosClientes} from "./listPercursos.js"
 
 
 const auth = getAuth(firebaseConfig)
@@ -71,6 +71,7 @@ const login = async() => {
 
         const user = userCredential.user
         localStorage.setItem("uidUser", user.uid)
+        localStorage.setItem("email", user.email)
         localStorage.setItem("log", true)
 
     }).catch((error) =>{
@@ -301,6 +302,20 @@ const getPercursos = async () =>{
 })
 }
 
+//listar percursos cliente
+const getPercursosClientes = async()=>{
+  console.log("listar")
+  const list = document.querySelector("#list-percursos-clientes")
+  list.innerHTML = ""
+  console.log(list)
+  const q = await query(collection(db, "newPercursos"))
+  const querySnapshot = await getDocs(q)
+  console.log(querySnapshot);
+  querySnapshot.forEach((doc) => {
+    //console.log(doc.data());
+    listPercursosClientes(doc)
+})
+}
 //inserir percursos
 const insertActivity = async()=>{
   
@@ -348,6 +363,39 @@ const sendListCliente = () =>{
   window.location.href = "/listClients.html"
 }
 
+//entrar no percurso
+const participateActivity = async () =>{
+  const list = document.querySelector("#list-percursos-clientes")
+    list.addEventListener('click', function(event){
+        if(document.getElementById("participar")){
+          var data = dataUserLogin()
+          
+          const info = {
+            uIdPercurso : event.target.getAttribute('data-id'),
+            nomePercurso: event.target.getAttribute('data-name'),
+            uIdParticipante:  localStorage.getItem("uidUser"),
+            nomeParticipante: data.FirstName,
+            email : localStorage.getItem("email")
+          }
+
+          var randomid = Math.random().toString(16).slice(2)
+
+          try {
+          
+            setDoc(doc(collection(db, "Participantes"), randomid), info)
+            console.log("Sucesso")
+            alert('Entrou na Atividade')
+
+          } catch (error) {
+            console.log(error.code + " " + error.name)
+          }
+
+
+        }
+    })
+
+}
+
 //logout
 const logout = async() =>{
     auth.signOut().then((on) =>{
@@ -381,6 +429,16 @@ switch(window.location.pathname) {
     document.getElementById("save-percurso").addEventListener("click", insertActivity)
     document.getElementById("administrador-clientes").addEventListener("click", sendListCliente)
     break;
+
+    case "/profileCliente.html":
+      document.getElementById("save-information-photo").addEventListener("click", updatePhoto)
+      document.getElementById("logout-btn").addEventListener("click", logout)
+      document.getElementById("save-information").addEventListener("click", updateDetailsAccount)
+      document.getElementById("salvar-saude").addEventListener("click", updateSaudeAccount)
+      completeLoginUser()
+      getPercursosClientes()
+      participateActivity()
+      break;
 
   case "/listClients.html":
      getClientes()

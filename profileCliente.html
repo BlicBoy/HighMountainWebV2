@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/profileUserStyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <title>Perfil Cliente</title>
+    <link rel="icon" type="image/x-icon" href="images/HighMountain.png" />
+</head>
+<body>
+
+
+    <div class="container-xl px-4 mt-4">
+        <!-- Account page navigation-->
+      
+        <nav class="nav nav-borders navbar navbar navbar-expand-lg">
+           
+            <img src="./images/Logo.png" width="80" height="90" class="navbar-brand">
+          
+            <div class=" collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto ">
+    
+                  <li class="nav-item">
+                    <a id="logout-btn" class="nav-link">Terminar sessão</a>
+                  </li>
+                </ul>
+            </div>
+
+        </nav>
+        <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Profile picture card-->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Foto de perfil</div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+
+                        <img class="img-account-profile rounded-circle mb-2" src="/images/avatar_Login_Register.png" id="imagem-perfil" width="150" height="150">
+                        <!-- Profile picture upload button-->
+                        <p></p>
+                        <label for="file-upload" class="custom-file-upload">
+                            Carregar nova imagem
+                        </label>
+                        <p></p>
+                        <input class="btn-7" type="file" id="photo">
+                            <p></p>
+                            <button class="btn-7" role="button" id="save-information-photo">Guardar alterações</button> 
+                    </div>
+                </div>
+                <br>
+                <!-- Profile picture card-->
+                <div class="wrapper ">
+                <div class="card mb-4 mb-xl">
+                    <div class="card-header">Percursos</div>
+                        <div class="card-body text-center">
+                
+                            <div class="container">
+                                <div class="row">
+                                    <ul class="list_lu" id="list-percursos-clientes"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-8">
+                <!-- Account details card-->
+                <div class="card mb-4">
+                    <div class="card-header">Detalhes da conta</div>
+                    <div class="card-body">
+                        
+                            
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFirstName">Nome próprio</label>
+                                    <input class="form-control" name="firstname" id="firstname-profile" type="text" placeholder="Nome próprio">
+                                </div>
+                                <!-- Form Group (last name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputLastName">Apelido</label>
+                                    <input class="form-control" name="Lastname" id="lastname-profile" type="text" placeholder="Apelido">
+                                </div>
+                            </div>
+                           
+                            
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (phone number)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputPhone">Número de telemóvel</label>
+                                    <input class="form-control" type="tel" id="phone-profile" placeholder="123 456 789">
+                                </div>
+                                <!-- Form Group (birthday)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputBirthday">Data de Nascimento</label>
+                                    <input class="form-control" type="date" id="datanasc-profile">
+                                </div>
+                            </div>
+
+                             <!-- Form Group (organization name)-->
+                             <div class="col-md-6">
+                                <label class="small mb-1" for="inputOrgName">Género</label>
+                                
+                                <select id="sexualidade" name="sexualidade" class="form-control">
+                                    <option disabled selected>Opções</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Não Binário">Não Binário</option>
+                                </select>
+                            </div>
+                            <p></p>
+                            <!-- Save changes button-->
+                            <button class="btn-7" role="button" id="save-information">Guardar alterações</button> 
+                        
+                    </div>
+                </div>
+
+                <!--
+                    Saude
+                -->
+                <div class="card mb-4">
+                    <div class="card-header">Saúde</div>
+                    <div class="card-body">
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFirstName">Doenças</label>
+                                    <input class="form-control" name="doencas" id="doencas" type="text" placeholder="Doenças">
+                                </div>
+                                <!-- Form Group (last name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputLastName">Alergias</label>
+                                    <input class="form-control" name="Alergias" id="alergias" type="text" placeholder="Alergias">
+                                </div>
+                            </div>
+                            <!-- Form Group (organization name)-->
+                             <div class="col-md-6">
+                                <label class="small mb-1" for="inputOrgName">Tipo Sanguíneos</label>
+                                
+                                <select id="tp-sangue" name="tiposangue" class="form-control">
+                                    <option disabled selected>Opções</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <p></p>
+                            <!-- Save changes button-->
+                            <button class="btn-7" role="button" id="salvar-saude">Guardar alterações</button> 
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="src/index.js"></script>
+    <script type="module" src="src/others.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+   
+</body>
+</html>
