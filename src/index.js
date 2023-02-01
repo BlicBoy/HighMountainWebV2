@@ -359,16 +359,16 @@ const insertActivity = async()=>{
 
 
 //enviar administador para a listagem dos clientes
-const sendListCliente = () =>{
+const sendListCliente = async() =>{
   window.location.href = "/listClients.html"
 }
 
 //entrar no percurso
-const participateActivity = async () =>{
+const participateActivity = async() =>{
   const list = document.querySelector("#list-percursos-clientes")
-    list.addEventListener('click', function(event){
+    list.addEventListener('click', async function(event){
         if(document.getElementById("participar")){
-          var data = dataUserLogin()
+          var data = await dataUserLogin()
           
           const info = {
             uIdPercurso : event.target.getAttribute('data-id'),
@@ -382,7 +382,7 @@ const participateActivity = async () =>{
 
           try {
           
-            setDoc(doc(collection(db, "Participantes"), randomid), info)
+            await setDoc(doc(collection(db, "Participantes"), randomid), info)
             console.log("Sucesso")
             alert('Entrou na Atividade')
 
