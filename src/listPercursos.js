@@ -68,4 +68,32 @@ const listPercursosClientes = async (data) => {
 
 
 
-export { listPercursos2, listPercursosClientes }
+const addPercursoParticipate = async(doc) =>{
+    let participante = await doc.data()
+    let html = "";
+
+    html += "<tr>"
+        html += "<td scope='row'>"+ participante.uIdPercurso+"</td>"
+        html += "<td>"+ participante.nomePercurso+"</td>"
+        html += "<td>"+ participante.nomeParticipante+"</td>"
+        html += "<td>"+ participante.email+"</td>"
+
+    html += "</tr>"
+
+
+    return html
+}
+
+
+const listPercursosParticipate = async (data) => {
+
+    const list = document.getElementById("body-table");
+
+    const html = await addPercursoParticipate(data);
+    
+    list.innerHTML +=  html;
+}  
+
+
+
+export { listPercursos2, listPercursosClientes, listPercursosParticipate }

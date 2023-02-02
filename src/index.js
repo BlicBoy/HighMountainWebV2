@@ -39,7 +39,7 @@ import{ getStorage,  ref, uploadBytes, getDownloadURL } from "https://www.gstati
 //imports internos
 import{ listClientes2 } from "./listClients.js"
 
-import{listPercursos2, listPercursosClientes} from "./listPercursos.js"
+import{listPercursos2, listPercursosClientes, listPercursosParticipate} from "./listPercursos.js"
 
 
 const auth = getAuth(firebaseConfig)
@@ -397,6 +397,121 @@ const participateActivity = async() =>{
 
 }
 
+//numero de eventos
+const countClientEvents = async() =>{
+  var numberParticipate = 0
+  const q = await query(collection(db,"Participantes"))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) =>{
+   if(doc.data().uIdParticipante === localStorage.getItem("uidUser")){
+      numberParticipate =+ 1
+   }
+  })
+
+
+  document.getElementById("total-eventos").innerHTML = numberParticipate
+}
+
+
+
+//media de medições oxigenio
+const mediaMedicoes = async() =>{
+  var numeroTotalMedicoes = 0.0
+  var count = 0
+  var media = 0.0
+  const q = await query(collection(db,"Medicoes"))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) =>{
+
+    if(doc.data().uIdPartipante === localStorage.getItem("uidUser")){
+      numeroTotalMedicoes = numeroTotalMedicoes + parseFloat(doc.data().nivelOxigenio)
+      count = count + 1
+    }
+  })
+
+  console.log(numeroTotalMedicoes)
+  console.log(count)
+
+  media = numeroTotalMedicoes/count
+  document.getElementById("media").innerHTML = media
+}
+
+
+//maior de medições oxigenio
+const maiorMedicoes = async() =>{
+  var maior = 0
+  const q = await query(collection(db,"Medicoes"))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) =>{
+
+    if(doc.data().uIdPartipante === localStorage.getItem("uidUser")){
+      if(doc.data().nivelOxigenio > maior){
+        maior = doc.data().nivelOxigenio
+      }
+    }
+  })
+  document.getElementById("maior").innerHTML = maior
+}
+
+
+
+//menor
+const menorMedicoes = async()=>{
+
+  var menor = 100
+  var temp 
+  const q = await query(collection(db,"Medicoes"))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) =>{
+    if(doc.data().uIdPartipante === localStorage.getItem("uidUser")){
+        temp = doc.data().nivelOxigenio
+      if(temp <= menor){
+        menor = temp
+      }
+    }
+  })
+  document.getElementById("menor").innerHTML = menor
+}
+
+
+
+//table 
+const listParticipate = async() =>{
+  console.log("listar")
+  const list = document.querySelector("#body-table")
+  list.innerHTML = ""
+  console.log(list)
+  const q = await query(collection(db, "Participantes"))
+  const querySnapshot = await getDocs(q)
+  console.log(querySnapshot);
+  querySnapshot.forEach((doc) => {
+    
+    if(doc.data().uIdParticipante === localStorage.getItem("uidUser")){
+      console.log(doc.data())  
+      listPercursosParticipate(doc)
+    }
+    
+})
+}
+
+
+//redirecionar para o perfil
+const redirectProfile = async() =>{
+  var data = await dataUserLogin()
+
+  if(data.role == "Administrador"){
+    window.location.href = "./profileAdmin.html"
+  }else if(data.role == "Cliente"){
+    window.location.href = "./profileCliente.html"
+  }
+}
+
+
+//redirecionar para a dashboard
+const redirectDashBoard  = async() =>{
+  window.location.href = "./dashboard.html"
+}
+
 //logout
 const logout = async() =>{
     auth.signOut().then((on) =>{
@@ -436,6 +551,10 @@ switch(window.location.pathname) {
       document.getElementById("logout-btn").addEventListener("click", logout)
       document.getElementById("save-information").addEventListener("click", updateDetailsAccount)
       document.getElementById("salvar-saude").addEventListener("click", updateSaudeAccount)
+
+      document.getElementById("dash-btn").addEventListener("click", redirectDashBoard)
+
+      
       completeLoginUser()
       getPercursosClientes()
       participateActivity()
@@ -443,6 +562,18 @@ switch(window.location.pathname) {
 
   case "/listClients.html":
      getClientes()
+    break;
+
+  case "/dashboard.html":
+    countClientEvents()
+    mediaMedicoes()
+    maiorMedicoes()
+    menorMedicoes()
+    listParticipate()
+
+    document.getElementById("Profile").addEventListener("click", redirectProfile)
+    document.getElementById("logout-btn").addEventListener("click", logout)
+
     break;
 
  

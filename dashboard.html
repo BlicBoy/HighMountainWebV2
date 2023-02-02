@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</head>
+
+
+
+
+
+<div style="padding-left: 10px; padding-right: 10px;">
+
+    <nav class="nav nav-borders navbar navbar navbar-expand-lg">
+        <img src="./images/Logo.png" width="80" height="90" class="navbar-brand">
+        <div class=" collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto ">
+
+                <li class="nav-item">
+                    <a id="Profile" class="nav-link" style="cursor: pointer;">Perfil</a>
+                </li>
+    
+              <li class="nav-item">
+                <a id="logout-btn" class="nav-link" style="cursor: pointer;">Terminar sessão</a>
+              </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <hr class="mt-0 mb-4">
+
+    <br>
+
+    <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Participações</h5>
+              <p class="card-text">Número de Participações: <span id="total-eventos"></span> </p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Média</h5>
+              <p class="card-text">Media Nivel Oxigenio: <span id="media"></span></p>
+            </div>
+          </div>
+        </div>
+    </div>
+
+      <br>
+
+      <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Menor</h5>
+              <p class="card-text">Menor Medição do Nivel Oxigenio: <span id="menor"></span></p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Maior</h5>
+              <p class="card-text">Maior Medição: <span id="maior"></span></p>
+            </div>
+          </div>
+        </div>
+    </div>
+      <br>
+
+      <hr> 
+
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome Percurso</th>
+            <th scope="col">Nome Participante</th>
+            <th scope="col">Email</th>
+          </tr>
+        </thead>
+        <tbody id="body-table">
+
+      
+      
+        </tbody>
+      </table>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+    
+</body>
+    <script type="module" src="src/index.js"></script>
+    <script type="module" src="src/others.js"></script>
+</html>
