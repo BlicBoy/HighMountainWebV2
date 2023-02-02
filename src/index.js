@@ -156,7 +156,7 @@ const datanewUser = async() =>{
   //Guarda clientes na base de dados
 
   try{
-    await setDoc(doc(collection(db, "newUsers"), uidUser), ClienteInfo)
+    await setDoc(doc(collection(db, "newUsers"), localStorage.getItem("uidUser")), ClienteInfo)
     getClientes()
     console.log("Sucesso!")
     window.location.href = "profileCliente.html" //redirecionar para a pagina do cliente
@@ -316,6 +316,7 @@ const getPercursosClientes = async()=>{
     listPercursosClientes(doc)
 })
 }
+
 //inserir percursos
 const insertActivity = async()=>{
   
