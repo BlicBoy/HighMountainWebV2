@@ -73,11 +73,8 @@ const addPercursoParticipate = async(doc) =>{
     let html = "";
 
     html += "<tr>"
-        html += "<td scope='row'>"+ participante.uIdPercurso+"</td>"
         html += "<td>"+ participante.nomePercurso+"</td>"
         html += "<td>"+ participante.nomeParticipante+"</td>"
-        html += "<td>"+ participante.email+"</td>"
-
     html += "</tr>"
 
 
