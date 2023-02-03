@@ -418,7 +418,7 @@ const countClientEvents = async() =>{
 const mediaMedicoes = async() =>{
   var numeroTotalMedicoes = 0.0
   var count = 0
-  var media = 0.0
+  var media = 0
   const q = await query(collection(db,"Medicoes"))
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) =>{
@@ -429,10 +429,12 @@ const mediaMedicoes = async() =>{
     }
   })
 
-  console.log(numeroTotalMedicoes)
-  console.log(count)
+  if(count == 0){
+    media = "Sem dados"
+  }else{
+    media = numeroTotalMedicoes/count
+  }
 
-  media = numeroTotalMedicoes/count
   document.getElementById("media").innerHTML = media
 }
 
@@ -450,7 +452,12 @@ const maiorMedicoes = async() =>{
       }
     }
   })
-  document.getElementById("maior").innerHTML = maior
+
+  if(maior != 0)
+    document.getElementById("maior").innerHTML = maior
+  else
+    document.getElementById("maior").innerHTML = "Sem dados"
+
 }
 
 
@@ -459,18 +466,25 @@ const maiorMedicoes = async() =>{
 const menorMedicoes = async()=>{
 
   var menor = 100
+  var count = 0
   var temp 
   const q = await query(collection(db,"Medicoes"))
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) =>{
     if(doc.data().uIdPartipante === localStorage.getItem("uidUser")){
+        count++
         temp = doc.data().nivelOxigenio
       if(temp <= menor){
         menor = temp
       }
     }
   })
-  document.getElementById("menor").innerHTML = menor
+
+  if(count != 0)
+    document.getElementById("menor").innerHTML = menor
+  else
+    document.getElementById("menor").innerHTML = "Sem dados"
+
 }
 
 
