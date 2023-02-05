@@ -73,7 +73,7 @@ const addPercursoParticipate = async(doc) =>{
     let html = "";
 
     html += "<tr>"
-        html += "<td>"+ participante.nomePercurso+"</td>"
+        html += "<td id='percurso' style='cursor:pointer;' data-id="+participante.uIdPercurso+">"+ participante.nomePercurso+"</td>"
         html += "<td>"+ participante.nomeParticipante+"</td>"
     html += "</tr>"
 

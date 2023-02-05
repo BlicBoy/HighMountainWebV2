@@ -404,7 +404,7 @@ const countClientEvents = async() =>{
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) =>{
    if(doc.data().uIdParticipante === localStorage.getItem("uidUser")){
-      numberParticipate =+ 1
+      numberParticipate++
    }
   })
 
@@ -521,6 +521,7 @@ const redirectProfile = async() =>{
 }
 
 
+
 //redirecionar para a dashboard
 const redirectDashBoard  = async() =>{
   window.location.href = "./dashboard.html"
@@ -537,6 +538,98 @@ const logout = async() =>{
       console.log(error)
     })
 }
+
+//ao clicar no nome do percurso escreve em cima os dados estatisticos relativos ao percurso
+const readDataButton = async()=>{
+  const table = document.querySelector("#body-table")
+  table.addEventListener('click', async function(event){
+    if(document.getElementById("percurso")){
+       maiorMedicaoPercurso(event.target.getAttribute('data-id'))
+       menorMedicaoPercurso(event.target.getAttribute('data-id'))
+       mediaPorPercurso(event.target.getAttribute('data-id'))
+    }
+  })
+}
+
+
+
+//maior medicao por percurso
+const maiorMedicaoPercurso = async(idPercurso)=>{
+  var maior = 0
+  const q = await query(collection(db,"Medicoes"))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) =>{
+    if(doc.data().uIdPartipante === localStorage.getItem("uidUser")  && doc.data().uIdPercurso === idPercurso){
+      if(doc.data().nivelOxigenio > maior){
+        maior = doc.data().nivelOxigenio
+      }
+    } 
+  })
+
+  if(maior != 0)
+  document.getElementById("maior").innerHTML = maior
+  else
+  document.getElementById("maior").innerHTML = "Sem dados"
+}
+
+
+//menor medicao feita por percurso
+const menorMedicaoPercurso = async(idPercurso)=>{
+ var menor = 100
+ var count  = 0
+ var temp
+ 
+
+  const q  =  await  query(collection(db, "Medicoes"))
+  const querySnapshot = await getDocs(q)
+
+  querySnapshot.forEach((doc)=>{
+
+    if(doc.data().uIdPartipante === localStorage.getItem("uidUser")  && doc.data().uIdPercurso === idPercurso){
+      count++
+      temp = doc.data().nivelOxigenio
+      if(temp <= menor){
+        menor = temp
+      }
+    }
+  })
+  if(count != 0)
+    document.getElementById("menor").innerHTML = menor
+  else
+    document.getElementById("menor").innerHTML = "Sem dados"
+
+
+
+}
+
+
+//media por percurso
+const mediaPorPercurso = async(idPercurso) =>{
+
+  var numeroTotalMedicoes = 0.0
+  var count = 0
+  var media = 0
+  const q = await query(collection(db,"Medicoes"))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) =>{
+
+    if(doc.data().uIdPartipante === localStorage.getItem("uidUser")  && doc.data().uIdPercurso === idPercurso){
+      numeroTotalMedicoes = numeroTotalMedicoes + parseFloat(doc.data().nivelOxigenio)
+      count = count + 1
+    }
+  })
+
+  if(count == 0){
+    media = "Sem dados"
+  }else{
+    media = numeroTotalMedicoes/count
+  }
+
+  document.getElementById("media").innerHTML = media
+
+}
+
+
 
 
 //saber qual é a pagina
@@ -588,6 +681,8 @@ switch(window.location.pathname) {
     document.getElementById("Profile").addEventListener("click", redirectProfile)
     document.getElementById("logout-btn").addEventListener("click", logout)
 
+
+    readDataButton()
     break;
 
  
