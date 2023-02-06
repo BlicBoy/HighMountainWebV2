@@ -364,34 +364,81 @@ const sendListCliente = async() =>{
   window.location.href = "/listClients.html"
 }
 
+
+const verifyToParticipate = async(idPercurso) =>{
+
+  try {
+      const q = await query(collection(db, "Participantes"))
+      const querySnapshot = await getDocs(q)
+
+      var verify = true
+      
+
+
+      console.log(idPercurso)
+
+      querySnapshot.forEach((doc) =>{  
+          console.log("aqyuu")
+        
+
+
+        if(doc.data().uIdParticipante == localStorage.getItem("uidUser") && doc.data().uIdPercurso == idPercurso){
+          verify = false;
+        }
+      })
+
+
+      
+
+
+    } catch (error) {
+      console.log(error.code + " " + error.message)
+    }
+      console.log("acolas")
+    return verify
+}
+
+
+
 //entrar no percurso
 const participateActivity = async() =>{
   const list = document.querySelector("#list-percursos-clientes")
     list.addEventListener('click', async function(event){
         if(document.getElementById("participar")){
-          var data = await dataUserLogin()
+
+          console.log(event.target.getAttribute('data-id'))
+
+          var verify = await verifyToParticipate(event.target.getAttribute('data-id'))
+
+          console.log(verify)
+
+          if(verify == false){
+            alert('Ja está inscrito')
+          }else{
+
+            var data = await dataUserLogin()
           
-          const info = {
-            uIdPercurso : event.target.getAttribute('data-id'),
-            nomePercurso: event.target.getAttribute('data-name'),
-            uIdParticipante:  localStorage.getItem("uidUser"),
-            nomeParticipante: data.FirstName,
-            email : localStorage.getItem("email")
+            const info = {
+              uIdPercurso : event.target.getAttribute('data-id'),
+              nomePercurso: event.target.getAttribute('data-name'),
+              uIdParticipante:  localStorage.getItem("uidUser"),
+              nomeParticipante: data.FirstName,
+              email : localStorage.getItem("email")
+            }
+  
+            var randomid = Math.random().toString(16).slice(2)
+  
+            try {
+            
+              await setDoc(doc(collection(db, "Participantes"), randomid), info)
+              console.log("Sucesso")
+              alert('Entrou na Atividade')
+  
+            } catch (error) {
+              console.log(error.code + " " + error.name)
+            }
+
           }
-
-          var randomid = Math.random().toString(16).slice(2)
-
-          try {
-          
-            await setDoc(doc(collection(db, "Participantes"), randomid), info)
-            console.log("Sucesso")
-            alert('Entrou na Atividade')
-
-          } catch (error) {
-            console.log(error.code + " " + error.name)
-          }
-
-
         }
     })
 
