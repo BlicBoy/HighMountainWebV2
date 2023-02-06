@@ -48,6 +48,10 @@ const storage = getStorage(firebaseConfig)
 let today = new Date()
 let currentDay = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
 
+//fazer a validação da data, desabilitar dias passados
+const todayy = new Date();
+document.getElementById("dataInicio").setAttribute("min", todayy.toISOString().split("T")[0]);
+
 
 //vai buscar todos os dados do utilizador que fez login
 //sabe qual é o utilizador pelo uidUser que ganha valor dentro da função login
@@ -120,7 +124,7 @@ const registerClient = async() => {
           localStorage.setItem("log", true) //fica com o login feito
           
           
-      
+          validateDate()
           datanewUser() //guarda tudo depois
       }).catch((error) =>{
           console.log(error.code+ " " +error.message)
