@@ -433,6 +433,7 @@ const mediaMedicoes = async() =>{
     media = "Sem dados"
   }else{
     media = numeroTotalMedicoes/count
+    media = media.toFixed(2)
   }
 
   document.getElementById("media").innerHTML = media
@@ -623,6 +624,7 @@ const mediaPorPercurso = async(idPercurso) =>{
     media = "Sem dados"
   }else{
     media = numeroTotalMedicoes/count
+    media = media.toFixed(2)
   }
 
   document.getElementById("media").innerHTML = media
